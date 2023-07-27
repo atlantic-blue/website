@@ -63,15 +63,15 @@ resource "aws_cloudfront_distribution" "www_distribution" {
     managedBy   = "${lookup(local.tags, "managed_by")}"
   }
 
-#   aliases = [
-#     var.domain_name
-#   ]
+  aliases = [
+    var.domain_name
+  ]
 
   viewer_certificate {
-    cloudfront_default_certificate = true
-    # cloudfront_default_certificate = false
-    # ssl_support_method             = "sni-only"
-    # minimum_protocol_version       = "TLSv1.1_2016"
-    # acm_certificate_arn            = aws_acm_certificate.www_certificate.arn
+    # cloudfront_default_certificate = true
+    cloudfront_default_certificate = false
+    ssl_support_method             = "sni-only"
+    minimum_protocol_version       = "TLSv1.1_2016"
+    acm_certificate_arn            = aws_acm_certificate.www_certificate.arn
   }
 }
