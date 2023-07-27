@@ -23,14 +23,14 @@ jobs:
 
       - name: INSTALL
         run: |
-          cd packages/web && npm ci
+          cd packages/app && npm ci
 
       - name: BUILD
         run: |
-          cd packages/web && npm run build
+          cd packages/app && npm run build
 
       - name: DEPLOY BUILD
         run: |
-          cd packages/web/dist
+          cd packages/app/dist
           aws --version
           aws s3 sync . s3://$AWS_S3_BUCKET
