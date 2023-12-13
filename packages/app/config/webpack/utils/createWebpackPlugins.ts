@@ -1,7 +1,7 @@
-import * as CopyWebpackPlugin from 'copy-webpack-plugin'
-import * as HtmlWebpackPlugin from 'html-webpack-plugin'
-import * as path from 'path'
-import * as webpack from 'webpack'
+import CopyWebpackPlugin from 'copy-webpack-plugin'
+import HtmlWebpackPlugin from 'html-webpack-plugin'
+import path from 'path'
+import webpack from 'webpack'
 import { EnvironmentPlugin, WebpackPluginInstance } from 'webpack'
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer'
 
@@ -28,7 +28,7 @@ const createWebpackPlugins = (
                     from: path.join(paths.root, 'assets'),
                     to: path.join(paths.root, 'dist', 'assets'),
                 },
-              ],
+            ],
         }),
     ]
 
@@ -36,7 +36,7 @@ const createWebpackPlugins = (
         plugins.push(
             new BundleAnalyzerPlugin({
                 openAnalyzer: true,
-              }),
+            }),
         )
     }
 
