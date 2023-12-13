@@ -1,10 +1,11 @@
 import React from "react"
 
-const Banner = () => (
+const Banner: React.FC = (props) => (
     <svg
         width="562.25"
         height="127.25232718031042"
         viewBox="0 0 369.66666666666663 83.66552888274151"
+        {...props}
     >
         <g
             transform="matrix(1.0462439640538823,0,0,1.0462439640538823,-10.6716882337944,-10.46238675841097)"

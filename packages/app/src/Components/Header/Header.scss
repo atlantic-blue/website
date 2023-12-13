@@ -1,0 +1,27 @@
+.header {
+    background-color: rgb(201, 222, 223);
+    color: rgb(17, 24, 39);
+
+    &-grid {
+        display: grid;
+        margin-left: auto;
+        margin-right: auto;
+        grid-template-columns: auto auto auto;
+
+        max-width: 1080px;
+        padding: 1.5rem;
+
+        &-column {
+            grid-column: span 2/span 2;
+        }
+    }
+
+    &-logo {
+        max-width: 224px;
+
+        &-icon {
+            width: 200px;
+            height: 40px;
+        }
+    }
+}
