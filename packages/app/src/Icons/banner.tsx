@@ -1,6 +1,10 @@
 import React from "react"
 
-const Banner: React.FC = (props) => (
+interface BannerProps {
+    className: string
+}
+
+const Banner: React.FC<BannerProps> = (props) => (
     <svg
         width="562.25"
         height="127.25232718031042"
