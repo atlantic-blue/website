@@ -1,5 +1,6 @@
 import React from "react"
 import * as styles from "./Body.scss"
+import { Card } from "../Card/Card"
 
 const Body = () => {
     return (
@@ -35,6 +36,36 @@ const Body = () => {
                     </p>
                 </div>
             </section>
+
+            <section className={styles.sectionProducts}>
+                <div className={styles.sectionProductsContainer}>
+                    <Card
+                        img={{ src: "/assets/custom-software.jpg", alt: "Customized Software Solutions" }}
+                        title="Customized Software Solutions"
+                        description="We offer tailored software solutions to meet the unique needs of your business, ensuring seamless integration and enhanced efficiency."
+                    />
+
+                    <Card
+                        img={{ src: "/assets/agile-methodology.jpg", alt: "Agile Development Methodology" }}
+                        title="Agile Development Methodology"
+                        description="Using agile methodologies, we deliver high-quality software solutions faster, ensuring adaptability and quick response to market changes."
+                    />
+
+                    <Card
+                        img={{ src: "/assets/tech-support.jpg", alt: "Expert Technical Support" }}
+                        title="Expert Technical Support"
+                        description="Our team of technical experts provides dedicated support throughout the software development lifecycle, ensuring smooth implementation and ongoing maintenance."
+                    />
+                </div>
+            </section>
+
+            <section></section>
+
+            <section></section>
+
+            <section></section>
+
+            <section></section>
         </div>
     )
 }
