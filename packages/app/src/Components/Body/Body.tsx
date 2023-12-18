@@ -1,6 +1,8 @@
 import React from "react"
 import * as styles from "./Body.scss"
 import { Card } from "../Card/Card"
+import { Peacock } from "../../Icons/peacock"
+import { Dazn } from "../../Icons/dazn"
 
 const Body = () => {
     return (
@@ -59,7 +61,21 @@ const Body = () => {
                 </div>
             </section>
 
-            <section></section>
+            <section className={styles.sectionClients}>
+                <div className={styles.sectionClientsContainer}>
+                    <h2 className={styles.sectionClientsTitle}>
+                        Our Clients
+                    </h2>
+                    <div className={styles.sectionClientsIcons}>
+                        <Peacock className={styles.sectionClientsIconsGeneric} />
+                        <Dazn className={styles.sectionClientsIconsGeneric} />
+                        <div className={styles.sectionClientsIconsSky}></div>
+                    </div>
+                </div>
+                <div>
+
+                </div>
+            </section>
 
             <section></section>
 
