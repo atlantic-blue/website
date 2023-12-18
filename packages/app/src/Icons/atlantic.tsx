@@ -1,10 +1,10 @@
 import React from "react"
 
-interface BannerProps {
+interface AtlanticProps {
     className: string
 }
 
-const Banner: React.FC<BannerProps> = (props) => (
+const Atlantic: React.FC<AtlanticProps> = (props) => (
     <svg
         width="562.25"
         height="127.25232718031042"
@@ -48,4 +48,4 @@ const Banner: React.FC<BannerProps> = (props) => (
     </svg>
 )
 
-export { Banner }
+export { Atlantic }

@@ -3,6 +3,7 @@ import * as styles from "./Body.scss"
 import { Card } from "../Card/Card"
 import { Peacock } from "../../Icons/peacock"
 import { Dazn } from "../../Icons/dazn"
+import { AtlanticLogo } from "../../Icons/atlanticLogo"
 
 const Body = () => {
     return (
@@ -72,16 +73,31 @@ const Body = () => {
                         <div className={styles.sectionClientsIconsSky}></div>
                     </div>
                 </div>
-                <div>
-
-                </div>
             </section>
 
-            <section></section>
+            <section className={styles.sectionAbout}>
+                <div className={styles.sectionAboutContainer}>
+                    <div>
+                        <h2 className={styles.sectionAboutTitle}>
+                            About us
+                        </h2>
+                        <p className={styles.sectionAboutDescription}>
+                            Welcome to Atlantic, a leading software development company based in London, UK. With our extensive expertise and innovative solutions, we strive to transform ideas into reality.
+                            <br></br>
+                            <br></br>
+                            At Atlantic, we are passionate about creating cutting-edge software that meets the unique needs of our clients. Our team of skilled developers, designers, and strategists work collaboratively to deliver exceptional results that drive business growth and success. Trust us to provide tailored software solutions that are reliable, scalable, and user-friendly.
+                        </p>
+                    </div>
 
-            <section></section>
-
-            <section></section>
+                    <div
+                        className={styles.sectionAboutBackground}
+                    >
+                        <img
+                            className={styles.sectionAboutBackgroundImg}
+                            src="/assets/setup.jpg" alt="screen" />
+                    </div>
+                </div>
+            </section>
         </div>
     )
 }

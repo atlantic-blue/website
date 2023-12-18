@@ -1,7 +1,7 @@
 import React from 'react'
 
 import * as styles from './example.scss'
-import { Banner } from '../Icons/banner'
+import { Banner } from '../Icons/atlantic'
 
 const Example: React.FC = () => (
     <div className={styles.main} aria-label="example">

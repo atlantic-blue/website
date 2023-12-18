@@ -1,5 +1,5 @@
 import React from "react"
-import { Banner } from "../../Icons/banner"
+import { Atlantic } from "../../Icons/atlantic"
 
 import * as styles from "./Header.scss"
 
@@ -9,7 +9,7 @@ const Header = () => {
             <div className={styles.headerGrid}>
                 <div className={styles.headerGridColumn}>
                     <a href="/" className={styles.headerLogo}>
-                        <Banner className={styles.headerLogoIcon} />
+                        <Atlantic className={styles.headerLogoIcon} />
                     </a>
                 </div>
                 <div>
