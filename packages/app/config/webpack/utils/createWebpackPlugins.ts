@@ -30,6 +30,17 @@ const createWebpackPlugins = (
                 },
             ],
         }),
+        /**
+         * Add robots.txt
+         */
+        new CopyWebpackPlugin({
+            patterns: [
+                {
+                    from: path.join(paths.root, 'assets', 'robots.txt'),
+                    to: path.join(paths.root, 'dist'),
+                },
+            ],
+        }),
     ]
 
     if (env.analyze) {
