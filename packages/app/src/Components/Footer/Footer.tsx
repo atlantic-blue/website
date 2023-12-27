@@ -8,7 +8,7 @@ const Footer = () => {
         <div className={styles.footer}>
             <div className={styles.footerGrid}>
                 <div className={styles.footerGridColumn}>
-                    <a href="/" className={styles.footerLogo}>
+                    <a href="/" aria-label="Atlantic Blue Solutions" className={styles.footerLogo}>
                         <Atlantic className={styles.footerLogoIcon} />
                     </a>
                 </div>

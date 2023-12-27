@@ -8,7 +8,7 @@ const Header = () => {
         <header className={styles.header}>
             <div className={styles.headerGrid}>
                 <div className={styles.headerGridColumn}>
-                    <a href="/" className={styles.headerLogo}>
+                    <a href="/" aria-label="Atlantic Blue Solutions" className={styles.headerLogo}>
                         <Atlantic className={styles.headerLogoIcon} />
                     </a>
                 </div>
