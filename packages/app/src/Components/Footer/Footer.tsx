@@ -13,7 +13,7 @@ const Footer = () => {
                     </a>
                 </div>
                 <div className={styles.footerCopyright}>
-                    © {new Date().getFullYear()} Atlantic UK
+                    © {new Date().getFullYear()} London, UK
                 </div>
 
                 <div>
