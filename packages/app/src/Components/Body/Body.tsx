@@ -3,7 +3,6 @@ import * as styles from "./Body.scss"
 import { Card } from "../Card/Card"
 import { Peacock } from "../../Icons/peacock"
 import { Dazn } from "../../Icons/dazn"
-import { AtlanticLogo } from "../../Icons/atlanticLogo"
 
 const Body = () => {
     return (
@@ -19,10 +18,10 @@ const Body = () => {
 
                     <div className={styles.sectionCtaContent}>
                         <h2 className={styles.sectionCtaContentTitle}>
-                            Transform your business
+                            Elevate Your Business with Tailored Software Solutions
                         </h2>
                         <p className={styles.sectionCtaContentDescription}>
-                            Unlock the full potential of your business with our innovative software development solutions.
+                            Transform Your Business with Innovative Software Development Solutions.
                         </p>
                         <div className={styles.sectionCtaContentLinkContainer}>
                             <a href="/"
@@ -35,7 +34,7 @@ const Body = () => {
             <section className={styles.sectionIntro}>
                 <div className={styles.sectionIntroContainer}>
                     <p className={styles.sectionIntroContent}>
-                        Are you looking for top-notch software development services in London, UK? Look no further than Atlantic. Our team of skilled developers and engineers are dedicated to delivering high-quality, custom software solutions to meet your business needs. With a focus on innovation and efficiency, Atlantic is the partner you need to bring your software ideas to life.Whether you're a startup or an established company, Atlantic is committed to providing tailored software development services to help you stay ahead in the competitive tech industry. Contact us today to learn more about how we can help elevate your business with our expertise in software development.
+                        Are you seeking exceptional software development services? Look no further than Atlantic. Our dedicated team of skilled developers and engineers specializes in delivering high-quality, customized software solutions designed to meet your specific business needs. With a focus on innovation and efficiency, Atlantic is the partner you need to bring your software ideas to life.Whether you're a startup or an established company, Atlantic is committed to providing tailored software development services to help you stay ahead in the competitive tech industry. Contact us today to learn more about how we can help elevate your business with our expertise in software development.
                     </p>
                 </div>
             </section>
@@ -44,20 +43,20 @@ const Body = () => {
                 <div className={styles.sectionProductsContainer}>
                     <Card
                         img={{ src: "/assets/custom-software.jpg", alt: "Customized Software Solutions" }}
-                        title="Customized Software Solutions"
-                        description="We offer tailored software solutions to meet the unique needs of your business, ensuring seamless integration and enhanced efficiency."
+                        title="Tailored Solutions for Your Business"
+                        description="We understand the unique requirements of your business and offer personalized software solutions ensuring seamless integration and heightened efficiency."
                     />
 
                     <Card
                         img={{ src: "/assets/agile-methodology.jpg", alt: "Agile Development Methodology" }}
                         title="Agile Development Methodology"
-                        description="Using agile methodologies, we deliver high-quality software solutions faster, ensuring adaptability and quick response to market changes."
+                        description="Using agile methodologies, we deliver superior software solutions faster, guaranteeing adaptability and swift responses to market changes."
                     />
 
                     <Card
                         img={{ src: "/assets/tech-support.jpg", alt: "Expert Technical Support" }}
                         title="Expert Technical Support"
-                        description="Our team of technical experts provides dedicated support throughout the software development lifecycle, ensuring smooth implementation and ongoing maintenance."
+                        description="Our technical experts provide dedicated support throughout the software development lifecycle, ensuring smooth implementation and continuous maintenance."
                     />
                 </div>
             </section>
@@ -79,13 +78,16 @@ const Body = () => {
                 <div className={styles.sectionAboutContainer}>
                     <div>
                         <h2 className={styles.sectionAboutTitle}>
-                            About us
+                            Atlantic, Your Partner in Software Innovation
                         </h2>
+
                         <p className={styles.sectionAboutDescription}>
-                            Welcome to Atlantic, a leading software development company based in London, UK. With our extensive expertise and innovative solutions, we strive to transform ideas into reality.
+                            Welcome to Atlantic, a leading software development company in London, UK. We're committed to transforming ideas into reality with our extensive expertise and innovative solutions.
                             <br></br>
                             <br></br>
-                            At Atlantic, we are passionate about creating cutting-edge software that meets the unique needs of our clients. Our team of skilled developers, designers, and strategists work collaboratively to deliver exceptional results that drive business growth and success. Trust us to provide tailored software solutions that are reliable, scalable, and user-friendly.
+                            At Atlantic, we're passionate about crafting cutting-edge software that meets our clients' unique needs. Our collaborative team of skilled developers, designers, and strategists ensures exceptional results, driving business growth and success. Trust us to deliver reliable, scalable, and user-friendly tailored software solutions.
+                            <br></br>
+                            <br></br>
                         </p>
                     </div>
 
