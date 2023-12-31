@@ -1,8 +1,10 @@
 import React from "react"
-import * as styles from "./Body.scss"
+
 import { Card } from "../Card/Card"
-import { Peacock } from "../../Icons/peacock"
 import { Dazn } from "../../Icons/dazn"
+import { Peacock } from "../../Icons/peacock"
+
+import * as styles from "./Body.scss"
 
 const Body = () => {
     return (
@@ -24,7 +26,7 @@ const Body = () => {
                             Transform Your Business with Innovative Software Development Solutions.
                         </p>
                         <div className={styles.sectionCtaContentLinkContainer}>
-                            <a href="/"
+                            <a href="#about"
                                 className={styles.sectionCtaContentLink}>Learn More</a>
                         </div>
                     </div>
@@ -78,7 +80,7 @@ const Body = () => {
                 <div className={styles.sectionAboutContainer}>
                     <div>
                         <h2 className={styles.sectionAboutTitle}>
-                            Atlantic Blue, Your Partner in Software Innovation
+                            <a name="about">Atlantic Blue, Your Partner in Software Innovation</a>
                         </h2>
 
                         <p className={styles.sectionAboutDescription}>
