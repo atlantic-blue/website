@@ -13,6 +13,7 @@ jobs:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+      MIXPANEL_TOKEN: ${{ secrets.MIXPANEL_TOKEN }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -24,6 +25,14 @@ jobs:
       - name: INSTALL
         run: |
           cd packages/app && npm ci
+
+      - name: ADD ENV VARS
+        run: |
+          cd packages/app
+
+          echo "
+          MIXPANEL_TOKEN=$MIXPANEL_TOKEN
+          " > .env
 
       - name: BUILD
         run: |
