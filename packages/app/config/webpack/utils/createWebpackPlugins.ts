@@ -4,6 +4,7 @@ import path from 'path'
 import webpack from 'webpack'
 import { EnvironmentPlugin, WebpackPluginInstance } from 'webpack'
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer'
+import Dotenv from "dotenv-webpack"
 
 import { WebpackEnv, WebpackPaths } from '../types'
 
@@ -13,6 +14,14 @@ const createWebpackPlugins = (
 ): WebpackPluginInstance[] => {
     const plugins: WebpackPluginInstance[] = [
         new EnvironmentPlugin(env),
+
+        /**
+         * .env
+         */
+        new Dotenv({
+            path: path.join(paths.root, '.env'),
+        }),
+
         /**
          * Provide HTML template
          */

@@ -42,7 +42,7 @@ const Peacock: React.FC<PeacockProps> = props => {
                 d="M42.621 12.458v-1.321h1.692v6.077l-.014-.127c-.169-1.526-.892-3.429-1.678-4.629zm.705 9.918c-.22.465-.461.849-.705 1.221v1.321h1.692V18.76l-.028.393c-.109.982-.441 2.133-.959 3.224z"
                 fill="#eeefef"></path>
             <use xlinkHref="#pwob_i" fill="url(#pwob_j)"></use>
-            <use xlinkHref="#pwob_i" fill="url(#pwob_k)" fill-opacity=".2"></use>
+            <use xlinkHref="#pwob_i" fill="url(#pwob_k)" fillOpacity=".2"></use>
             <path
                 d="M38.791 12.32c-3.076 0-5.639 2.569-5.639 5.72s2.393 5.74 5.639 5.74c3.076 0 5.58-2.578 5.58-5.73s-2.502-5.731-5.58-5.731zm.029 9.625c-2.196 0-3.865-1.746-3.865-3.963s1.709-3.966 3.865-3.963c2.177.002 3.787 1.81 3.8 3.993.001 2.215-1.605 3.932-3.8 3.932z"
                 fill="url(#pwob_l)"></path>
@@ -77,9 +77,9 @@ const Peacock: React.FC<PeacockProps> = props => {
                     x2="9.021"
                     y2="15.036"
                     xlinkHref="#pwob_y">
-                    <stop stop-color="#fff"></stop>
-                    <stop offset=".498" stop-color="#fff"></stop>
-                    <stop offset="1" stop-color="#d7d9d9"></stop>
+                    <stop stopColor="#fff"></stop>
+                    <stop offset=".498" stopColor="#fff"></stop>
+                    <stop offset="1" stopColor="#d7d9d9"></stop>
                 </linearGradient>
                 <linearGradient
                     id="pwob_d"
@@ -88,8 +88,8 @@ const Peacock: React.FC<PeacockProps> = props => {
                     x2="3.858"
                     y2="27.689"
                     xlinkHref="#pwob_y">
-                    <stop stop-color="#fff"></stop>
-                    <stop offset="1" stop-color="#c7c7c7"></stop>
+                    <stop stopColor="#fff"></stop>
+                    <stop offset="1" stopColor="#c7c7c7"></stop>
                 </linearGradient>
                 <linearGradient
                     id="pwob_e"
@@ -98,8 +98,8 @@ const Peacock: React.FC<PeacockProps> = props => {
                     x2="3.631"
                     y2="23.377"
                     xlinkHref="#pwob_y">
-                    <stop stop-color="#f3f4f4"></stop>
-                    <stop offset=".966" stop-color="#f1f2f2" stop-opacity="0"></stop>
+                    <stop stopColor="#f3f4f4"></stop>
+                    <stop offset=".966" stopColor="#f1f2f2" stopOpacity="0"></stop>
                 </linearGradient>
                 <linearGradient
                     id="pwob_f"
@@ -108,8 +108,8 @@ const Peacock: React.FC<PeacockProps> = props => {
                     x2="19.926"
                     y2="18.767"
                     xlinkHref="#pwob_y">
-                    <stop stop-color="#d1d3d4"></stop>
-                    <stop offset="1" stop-color="#fff"></stop>
+                    <stop stopColor="#d1d3d4"></stop>
+                    <stop offset="1" stopColor="#fff"></stop>
                 </linearGradient>
                 <linearGradient
                     id="pwob_g"
@@ -118,9 +118,9 @@ const Peacock: React.FC<PeacockProps> = props => {
                     x2="23.66"
                     y2="12.369"
                     xlinkHref="#pwob_y">
-                    <stop offset=".078" stop-color="#fff"></stop>
-                    <stop offset=".495" stop-color="#fff"></stop>
-                    <stop offset="1" stop-color="#d1d3d4"></stop>
+                    <stop offset=".078" stopColor="#fff"></stop>
+                    <stop offset=".495" stopColor="#fff"></stop>
+                    <stop offset="1" stopColor="#d1d3d4"></stop>
                 </linearGradient>
                 <linearGradient
                     id="pwob_h"
@@ -129,9 +129,9 @@ const Peacock: React.FC<PeacockProps> = props => {
                     x2="26.837"
                     y2="8.681"
                     xlinkHref="#pwob_y">
-                    <stop stop-color="#d1d3d4"></stop>
-                    <stop offset=".181" stop-color="#d1d3d4"></stop>
-                    <stop offset=".587" stop-color="#fff"></stop>
+                    <stop stopColor="#d1d3d4"></stop>
+                    <stop offset=".181" stopColor="#d1d3d4"></stop>
+                    <stop offset=".587" stopColor="#fff"></stop>
                 </linearGradient>
                 <linearGradient
                     id="pwob_j"
@@ -140,8 +140,8 @@ const Peacock: React.FC<PeacockProps> = props => {
                     x2="41.581"
                     y2="10.787"
                     xlinkHref="#pwob_y">
-                    <stop offset=".103" stop-color="#d1d3d4"></stop>
-                    <stop offset=".714" stop-color="#fff"></stop>
+                    <stop offset=".103" stopColor="#d1d3d4"></stop>
+                    <stop offset=".714" stopColor="#fff"></stop>
                 </linearGradient>
                 <linearGradient
                     id="pwob_k"
@@ -150,8 +150,8 @@ const Peacock: React.FC<PeacockProps> = props => {
                     x2="40.171"
                     y2="18.497"
                     xlinkHref="#pwob_y">
-                    <stop stop-opacity=".81"></stop>
-                    <stop offset="1" stop-opacity="0"></stop>
+                    <stop stopOpacity=".81"></stop>
+                    <stop offset="1" stopOpacity="0"></stop>
                 </linearGradient>
                 <linearGradient
                     id="pwob_l"
@@ -160,10 +160,10 @@ const Peacock: React.FC<PeacockProps> = props => {
                     x2="39.679"
                     y2="9.592"
                     xlinkHref="#pwob_y">
-                    <stop offset=".058" stop-color="#fff"></stop>
-                    <stop offset=".54" stop-color="#f5f6f6"></stop>
-                    <stop offset=".759" stop-color="#d1d3d4"></stop>
-                    <stop offset=".894" stop-color="#eaeaea"></stop>
+                    <stop offset=".058" stopColor="#fff"></stop>
+                    <stop offset=".54" stopColor="#f5f6f6"></stop>
+                    <stop offset=".759" stopColor="#d1d3d4"></stop>
+                    <stop offset=".894" stopColor="#eaeaea"></stop>
                 </linearGradient>
                 <linearGradient
                     id="pwob_m"
@@ -172,8 +172,8 @@ const Peacock: React.FC<PeacockProps> = props => {
                     x2="44.275"
                     y2="17.122"
                     xlinkHref="#pwob_y">
-                    <stop stop-color="#f6f7f7"></stop>
-                    <stop offset="1" stop-color="#fff"></stop>
+                    <stop stopColor="#f6f7f7"></stop>
+                    <stop offset="1" stopColor="#fff"></stop>
                 </linearGradient>
                 <linearGradient
                     id="pwob_o"
@@ -182,10 +182,10 @@ const Peacock: React.FC<PeacockProps> = props => {
                     x2="59.008"
                     y2="14.298"
                     xlinkHref="#pwob_y">
-                    <stop stop-color="#fff"></stop>
-                    <stop offset=".294" stop-color="#fff"></stop>
-                    <stop offset=".659" stop-color="#eee"></stop>
-                    <stop offset=".907" stop-color="#d1d3d4"></stop>
+                    <stop stopColor="#fff"></stop>
+                    <stop offset=".294" stopColor="#fff"></stop>
+                    <stop offset=".659" stopColor="#eee"></stop>
+                    <stop offset=".907" stopColor="#d1d3d4"></stop>
                 </linearGradient>
                 <linearGradient
                     id="pwob_p"
@@ -194,8 +194,8 @@ const Peacock: React.FC<PeacockProps> = props => {
                     x2="56.455"
                     y2="19.632"
                     xlinkHref="#pwob_y">
-                    <stop stop-color="#fff" stop-opacity=".59"></stop>
-                    <stop offset="1" stop-color="#fff" stop-opacity="0"></stop>
+                    <stop stopColor="#fff" stopOpacity=".59"></stop>
+                    <stop offset="1" stopColor="#fff" stopOpacity="0"></stop>
                 </linearGradient>
                 <linearGradient
                     id="pwob_r"
@@ -204,10 +204,10 @@ const Peacock: React.FC<PeacockProps> = props => {
                     x2="53.593"
                     y2="8.694"
                     xlinkHref="#pwob_y">
-                    <stop stop-color="#d1d3d4"></stop>
-                    <stop offset=".181" stop-color="#d1d3d4"></stop>
-                    <stop offset=".329" stop-color="#e9eaea"></stop>
-                    <stop offset=".642" stop-color="#fff"></stop>
+                    <stop stopColor="#d1d3d4"></stop>
+                    <stop offset=".181" stopColor="#d1d3d4"></stop>
+                    <stop offset=".329" stopColor="#e9eaea"></stop>
+                    <stop offset=".642" stopColor="#fff"></stop>
                 </linearGradient>
                 <linearGradient
                     id="pwob_s"
@@ -216,9 +216,9 @@ const Peacock: React.FC<PeacockProps> = props => {
                     x2="73.626"
                     y2="11.453"
                     xlinkHref="#pwob_y">
-                    <stop offset=".054" stop-color="#d1d3d4"></stop>
-                    <stop offset=".662" stop-color="#fcfcfc"></stop>
-                    <stop offset=".936" stop-color="#fff"></stop>
+                    <stop offset=".054" stopColor="#d1d3d4"></stop>
+                    <stop offset=".662" stopColor="#fcfcfc"></stop>
+                    <stop offset=".936" stopColor="#fff"></stop>
                 </linearGradient>
                 <linearGradient
                     id="pwob_t"
@@ -227,9 +227,9 @@ const Peacock: React.FC<PeacockProps> = props => {
                     x2="70.281"
                     y2="12.697"
                     xlinkHref="#pwob_y">
-                    <stop offset=".054" stop-color="#fff"></stop>
-                    <stop offset=".206" stop-color="#fff"></stop>
-                    <stop offset=".907" stop-color="#d3d5d6"></stop>
+                    <stop offset=".054" stopColor="#fff"></stop>
+                    <stop offset=".206" stopColor="#fff"></stop>
+                    <stop offset=".907" stopColor="#d3d5d6"></stop>
                 </linearGradient>
                 <linearGradient
                     id="pwob_u"
@@ -238,10 +238,10 @@ const Peacock: React.FC<PeacockProps> = props => {
                     x2="61.051"
                     y2="12.256"
                     xlinkHref="#pwob_y">
-                    <stop stop-color="#fff"></stop>
-                    <stop offset=".294" stop-color="#fff"></stop>
-                    <stop offset=".659" stop-color="#eee"></stop>
-                    <stop offset=".907" stop-color="#d1d3d4"></stop>
+                    <stop stopColor="#fff"></stop>
+                    <stop offset=".294" stopColor="#fff"></stop>
+                    <stop offset=".659" stopColor="#eee"></stop>
+                    <stop offset=".907" stopColor="#d1d3d4"></stop>
                 </linearGradient>
                 <linearGradient
                     id="pwob_v"
@@ -250,10 +250,10 @@ const Peacock: React.FC<PeacockProps> = props => {
                     x2="100.057"
                     y2="24.81"
                     xlinkHref="#pwob_y">
-                    <stop stop-color="#fff"></stop>
-                    <stop offset=".392" stop-color="#f1f2f2"></stop>
-                    <stop offset=".73" stop-color="#e6e7e7"></stop>
-                    <stop offset="1" stop-color="#d3d5d6"></stop>
+                    <stop stopColor="#fff"></stop>
+                    <stop offset=".392" stopColor="#f1f2f2"></stop>
+                    <stop offset=".73" stopColor="#e6e7e7"></stop>
+                    <stop offset="1" stopColor="#d3d5d6"></stop>
                 </linearGradient>
                 <linearGradient
                     id="pwob_w"
@@ -262,10 +262,10 @@ const Peacock: React.FC<PeacockProps> = props => {
                     x2="93.96"
                     y2="20.629"
                     xlinkHref="#pwob_y">
-                    <stop stop-color="#eeefef"></stop>
-                    <stop offset=".392" stop-color="#f1f2f2"></stop>
-                    <stop offset=".73" stop-color="#e8e9ea"></stop>
-                    <stop offset="1" stop-color="#e6e7e8"></stop>
+                    <stop stopColor="#eeefef"></stop>
+                    <stop offset=".392" stopColor="#f1f2f2"></stop>
+                    <stop offset=".73" stopColor="#e8e9ea"></stop>
+                    <stop offset="1" stopColor="#e6e7e8"></stop>
                 </linearGradient>
                 <linearGradient
                     id="pwob_x"
@@ -274,10 +274,10 @@ const Peacock: React.FC<PeacockProps> = props => {
                     x2="92.598"
                     y2="24.601"
                     xlinkHref="#pwob_y">
-                    <stop stop-color="#f1f2f2"></stop>
-                    <stop offset=".392" stop-color="#f1f2f2"></stop>
-                    <stop offset=".73" stop-color="#e6e7e7"></stop>
-                    <stop offset="1" stop-color="#d3d5d6"></stop>
+                    <stop stopColor="#f1f2f2"></stop>
+                    <stop offset=".392" stopColor="#f1f2f2"></stop>
+                    <stop offset=".73" stopColor="#e6e7e7"></stop>
+                    <stop offset="1" stopColor="#d3d5d6"></stop>
                 </linearGradient>
                 <linearGradient id="pwob_y" gradientUnits="userSpaceOnUse"></linearGradient>
                 <path
