@@ -9,6 +9,7 @@ const router = createBrowserRouter([
     {
         path: "/",
         element: <PageHome language={ResourceStringLanguage.ENGLISH} />,
+        errorElement: <PageHome language={ResourceStringLanguage.ENGLISH} />,
     },
     {
         path: "/en",
