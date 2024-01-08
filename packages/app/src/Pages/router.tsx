@@ -22,6 +22,10 @@ const router = createBrowserRouter([
         path: "/pt",
         element: <PageHome language={ResourceStringLanguage.PORTUGUESE} />,
     },
+    {
+        path: "/ru",
+        element: <PageHome language={ResourceStringLanguage.RUSSIAN} />,
+    },
 ]);
 
 export default router
