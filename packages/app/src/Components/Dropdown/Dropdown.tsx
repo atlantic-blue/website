@@ -2,13 +2,21 @@ import React from "react"
 
 import * as styles from "./Dropdown.scss"
 
+interface Option {
+    key: string,
+    value: string,
+    img: React.ReactNode
+}
+
 interface DropdownProps<T> {
-    button: string
-    options: Array<{ key: string, value: string }>
+    button: string;
+    options: Array<Option>;
+    default: Option;
     onSelect<T>(selected: T): void
 }
 
 const Dropdown: React.FC<DropdownProps<T>> = (props) => {
+    const [selected, setSelected] = React.useState<Option>(props.default)
     const [isOpen, setOpen] = React.useState(false)
     const menuRef = React.useRef(null)
 
@@ -25,7 +33,6 @@ const Dropdown: React.FC<DropdownProps<T>> = (props) => {
         setOpen(prev => !prev)
     }
 
-
     React.useEffect(() => {
         document.addEventListener("click", close)
 
@@ -36,27 +43,36 @@ const Dropdown: React.FC<DropdownProps<T>> = (props) => {
 
     return (
         <div className={styles.container}>
-            <button onClick={onClick}
-                className={styles.button}
-            >
-                {props.button}
+            <button onClick={onClick} className={styles.button}>
+                <span className={styles.buttonImg}>{selected.img}</span>
+                <span className={styles.buttonValue}>{selected.value}</span>
             </button>
-            {
-                isOpen ? (
+            {isOpen
+                ? (
                     <ul className={styles.menu} ref={menuRef}>
-                        {props.options.map(option => {
-                            return (
-                                <li key={option.key}
-                                    onClick={() => {
-                                        props.onSelect(option.key)
-                                        onClick()
-                                    }}>
-                                    {option.value}
-                                </li>
-                            )
-                        })}
+                        {props
+                            .options
+                            .map(option => {
+                                return (
+                                    <li
+                                        key={option.key}
+                                        onClick={
+                                            () => {
+                                                setSelected(option)
+                                                props.onSelect(option.key);
+                                                onClick()
+                                            }
+                                        }
+                                        className={styles.option}
+                                    >
+                                        <span className={styles.optionImg}>{option.img}</span>
+                                        <span className={styles.optionValue}>{option.value}</span>
+                                    </li>
+                                )
+                            })}
                     </ul>
-                ) : null
+                )
+                : null
             }
         </div>
     )
