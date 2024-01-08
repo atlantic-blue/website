@@ -8,9 +8,9 @@ import router from './Pages/router';
 import "./App.scss"
 
 const App: React.FC = () => (
-    <React.StrictMode>
-        <RouterProvider router={router} />
-    </React.StrictMode>
+
+    <RouterProvider router={router} />
+
 )
 
 export { App }

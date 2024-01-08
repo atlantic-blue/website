@@ -1,8 +1,8 @@
 export enum ResourceStringLanguage {
-    ENGLISH = "ENGLISH",
-    SPANISH = "SPANISH",
-    PORTUGUESE = "PORTUGUESE",
-    RUSSIAN = "RUSSIAN"
+    ENGLISH = "en",
+    SPANISH = "es",
+    PORTUGUESE = "pt",
+    RUSSIAN = "ru"
 }
 
 export interface ResourceStrings {
