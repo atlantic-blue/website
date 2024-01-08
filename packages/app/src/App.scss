@@ -63,7 +63,7 @@ h6 {
 /*
     8. Create a root stacking context
   */
-.app {
+:global(#main) {
     height: auto;
     isolation: isolate;
     font-family: Roboto, sans-serif;

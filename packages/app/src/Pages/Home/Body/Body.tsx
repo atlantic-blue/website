@@ -1,10 +1,10 @@
 import React from "react"
 
-import { Card } from "../Card/Card"
-import { Dazn } from "../../Icons/dazn"
-import { Peacock } from "../../Icons/peacock"
-import { resourceStrings } from "../../ResourceStrings"
-import { ResourceStringLanguage, ResourceStrings } from "../../ResourceStrings/types"
+import { Card } from "../../../Components/Card/Card"
+import { Dazn } from "../../../Icons/dazn"
+import { Peacock } from "../../../Icons/peacock"
+import { resourceStrings } from "../../../ResourceStrings"
+import { ResourceStringLanguage, ResourceStrings } from "../../../ResourceStrings/types"
 
 import * as styles from "./Body.scss"
 
@@ -120,16 +120,14 @@ const SectionAbout = ({ resourceStrings }: { resourceStrings: ResourceStrings['h
     )
 }
 
-const Body = () => {
-    const resourceStringsBody = resourceStrings[ResourceStringLanguage.ENGLISH]
-
+const Body = ({ resourceStrings }: { resourceStrings: ResourceStrings['home'] }) => {
     return (
         <div className={styles.body}>
-            <SectionHero resourceStrings={resourceStringsBody.home.section.hero} />
-            <SectionIntro resourceStrings={resourceStringsBody.home.section.intro} />
-            <SectionProducts resourceStrings={resourceStringsBody.home.section.products} />
-            <SectionClients resourceStrings={resourceStringsBody.home.section.clients} />
-            <SectionAbout resourceStrings={resourceStringsBody.home.section.about} />
+            <SectionHero resourceStrings={resourceStrings.section.hero} />
+            <SectionIntro resourceStrings={resourceStrings.section.intro} />
+            <SectionProducts resourceStrings={resourceStrings.section.products} />
+            <SectionClients resourceStrings={resourceStrings.section.clients} />
+            <SectionAbout resourceStrings={resourceStrings.section.about} />
         </div>
     )
 }
