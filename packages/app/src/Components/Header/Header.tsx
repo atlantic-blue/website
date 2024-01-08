@@ -35,7 +35,7 @@ const Header = () => {
                     <Dropdown
                         button="Lang"
                         onSelect={(selected) => {
-                            navigate(`/${ResourceStringLanguage[selected as ResourceStringLanguage]}`)
+                            navigate(`/${Object(ResourceStringLanguage)[selected as ResourceStringLanguage]}`)
                         }}
                         default={{
                             img: <IconGreatBritain />,
@@ -45,12 +45,11 @@ const Header = () => {
                         options={
                             Object
                                 .keys(ResourceStringLanguage)
-                                .map(key => {
-                                    console.log({ key }, countryImages[ResourceStringLanguage[key as ResourceStringLanguage]])
+                                .map((key) => {
                                     return {
                                         key,
+                                        img: countryImages[Object(ResourceStringLanguage)[key] as ResourceStringLanguage],
                                         value: capitalise(key.toLocaleLowerCase()),
-                                        img: countryImages[ResourceStringLanguage[key as ResourceStringLanguage]]
                                     }
                                 })
                         }
