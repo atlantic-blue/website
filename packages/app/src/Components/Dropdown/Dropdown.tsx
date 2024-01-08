@@ -9,10 +9,9 @@ interface Option {
 }
 
 interface DropdownProps<T> {
-    button: string;
     options: Array<Option>;
     default: Option;
-    onSelect<T>(selected: T): void
+    onSelect(selected: Option): void
 }
 
 const Dropdown: React.FC<DropdownProps<T>> = (props) => {
@@ -59,7 +58,7 @@ const Dropdown: React.FC<DropdownProps<T>> = (props) => {
                                         onClick={
                                             () => {
                                                 setSelected(option)
-                                                props.onSelect(option.key);
+                                                props.onSelect(option);
                                                 onClick()
                                             }
                                         }

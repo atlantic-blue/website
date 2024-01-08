@@ -8,9 +8,7 @@ import router from './Pages/router';
 import "./App.scss"
 
 const App: React.FC = () => (
-
     <RouterProvider router={router} />
-
 )
 
 export { App }

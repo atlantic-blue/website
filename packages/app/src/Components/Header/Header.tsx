@@ -1,10 +1,9 @@
 import React from "react"
 import { Atlantic } from "../../Icons/atlantic"
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 import { Dropdown } from "../Dropdown/Dropdown"
 import { ResourceStringLanguage } from "../../ResourceStrings/types"
-import { capitalise } from "../../Utils/capitalise";
 import { IconGreatBritain } from "../../Icons/greatBritain";
 import { IconPortugal } from "../../Icons/portugal";
 import { IconSpain } from "../../Icons/spain";
@@ -19,8 +18,28 @@ const countryImages = {
     [ResourceStringLanguage.SPANISH]: <IconSpain />,
 }
 
+const getOption = (key: string) => {
+    if (!key || key === "" || key === "undefined") {
+        return {
+            img: <IconGreatBritain />,
+            key: "ENGLISH",
+            value: ResourceStringLanguage.ENGLISH,
+        }
+    }
+
+    return {
+        key,
+        img: countryImages[Object(ResourceStringLanguage)[key] as ResourceStringLanguage],
+        value: Object(ResourceStringLanguage)[key] as ResourceStringLanguage,
+    }
+}
+
 const Header = () => {
     const navigate = useNavigate();
+    const location = useLocation();
+    const langPath = location.pathname.split("/")[1]
+    const currentLanguage = Object.keys(ResourceStringLanguage)
+        .find(key => ResourceStringLanguage[key] === langPath) || "ENGLISH"
 
     return (
         <header className={styles.header}>
@@ -33,28 +52,17 @@ const Header = () => {
                 <div>
 
                     <Dropdown
-                        button="Lang"
                         onSelect={(selected) => {
-                            navigate(`/${Object(ResourceStringLanguage)[selected as ResourceStringLanguage]}`)
+                            navigate(`/${Object(ResourceStringLanguage)[selected.key as ResourceStringLanguage]}`)
                         }}
-                        default={{
-                            img: <IconGreatBritain />,
-                            key: capitalise(ResourceStringLanguage["ENGLISH"].toLocaleLowerCase()),
-                            value: ResourceStringLanguage["ENGLISH"]
-                        }}
+                        default={getOption(currentLanguage)}
                         options={
                             Object
                                 .keys(ResourceStringLanguage)
-                                .map((key) => {
-                                    return {
-                                        key,
-                                        img: countryImages[Object(ResourceStringLanguage)[key] as ResourceStringLanguage],
-                                        value: capitalise(key.toLocaleLowerCase()),
-                                    }
-                                })
+                                .map(getOption)
                         }
-
                     />
+
                 </div>
 
                 <div></div>
