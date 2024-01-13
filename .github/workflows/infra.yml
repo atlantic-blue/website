@@ -11,28 +11,31 @@ jobs:
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.TERRAFORM_AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.TERRAFORM_AWS_SECRET_ACCESS_KEY }}
-    options: --user root
     steps:
       - name: Checkout
         uses: actions/checkout@v2
       - name: INSTALL TERRAFORM
         run: |
-          apt-get update > /dev/null && apt-get install -y wget gnupg software-properties-common > /dev/null
+          # apt-get update > /dev/null && apt-get install -y wget gnupg software-properties-common > /dev/null
           
-          echo "GPG KEYS"
-          wget -O- https://apt.releases.hashicorp.com/gpg | \
-            gpg --dearmor | \
-            tee /usr/share/keyrings/hashicorp-archive-keyring.gpg > /dev/null
+          # echo "GPG KEYS"
+          # wget -O- https://apt.releases.hashicorp.com/gpg | \
+          #   gpg --dearmor | \
+          #   tee /usr/share/keyrings/hashicorp-archive-keyring.gpg > /dev/null
           
-          gpg --no-default-keyring \
-            --keyring /usr/share/keyrings/hashicorp-archive-keyring.gpg \
-            --fingerprint > /dev/null
+          # gpg --no-default-keyring \
+          #   --keyring /usr/share/keyrings/hashicorp-archive-keyring.gpg \
+          #   --fingerprint > /dev/null
           
-          echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] \
-            https://apt.releases.hashicorp.com $(lsb_release -cs) main" | \
-            tee /etc/apt/sources.list.d/hashicorp.list  > /dev/null
+          # echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] \
+          #   https://apt.releases.hashicorp.com $(lsb_release -cs) main" | \
+          #   tee /etc/apt/sources.list.d/hashicorp.list  > /dev/null
 
-          echo "INSTALL"
-          apt update > /dev/null && apt-get -y install terraform > /dev/null
+          # echo "INSTALL"
+          # apt update > /dev/null && apt-get -y install terraform > /dev/null
+
+          wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+          echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+          sudo apt update && sudo apt install terraform
 
           terraform -help
