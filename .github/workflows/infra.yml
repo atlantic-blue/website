@@ -3,7 +3,7 @@ name: INFRA
 on:
   push:
     branches:
-      - terraform-ci
+      - main
 
 jobs:
   plan:
