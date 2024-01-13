@@ -6,6 +6,6 @@ terraform {
     key     = "abs-website"
     region  = "us-east-1"
     encrypt = true
-    profile = "atlantic-blue"
+    profile = "atlantic-blue-infra"
   }
 }
