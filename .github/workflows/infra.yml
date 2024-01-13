@@ -11,6 +11,7 @@ jobs:
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.TERRAFORM_AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.TERRAFORM_AWS_SECRET_ACCESS_KEY }}
+    options: --user root
     steps:
       - name: Checkout
         uses: actions/checkout@v2
