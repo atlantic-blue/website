@@ -4,7 +4,7 @@ variable "aws_region" {
 }
 
 variable "aws_profile" {
-  default     = "atlantic-blue"
+  default     = "atlantic-blue-infra"
   description = "NA"
 }
 
