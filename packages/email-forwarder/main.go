@@ -1,22 +1,17 @@
 package main
 
 import (
-	emailLambda "email-forwarder/internal/lambda"
+	"email-forwarder/internal/lambda"
 	"errors"
 	"log"
 	"os"
 	"strings"
 
-	"github.com/aws/aws-lambda-go/events"
-	"github.com/aws/aws-lambda-go/lambda"
+	awsLambda "github.com/aws/aws-lambda-go/lambda"
 	"github.com/sirupsen/logrus"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/sync/errgroup"
 )
-
-func ReceiveMail(event events.SimpleEmailEvent) (interface{}, error) {
-	return event, nil
-}
 
 var (
 	config struct {
@@ -25,6 +20,7 @@ var (
 
 		MailBucket            string
 		MailForwardBouncePath string
+		MailConfigurationSet  string
 
 		MailForwardAsName  string
 		MailForwardAsEmail string
@@ -50,44 +46,51 @@ var (
 		},
 
 		&cli.StringFlag{
-			Name:        "log-output",
-			Usage:       "Log Output (text, json)",
+			Name:        "mail-bucket",
+			Usage:       "mail-bucket",
 			EnvVars:     []string{"MAIL_BUCKET"},
 			Value:       "",
 			Destination: &config.MailBucket,
 		},
 		&cli.StringFlag{
-			Name:        "log-output",
-			Usage:       "Log Output (text, json)",
+			Name:        "mail-configuration-set",
+			Usage:       "mail-configuration-set",
+			EnvVars:     []string{"MAIL_CONFIGURATION_SET"},
+			Value:       "",
+			Destination: &config.MailConfigurationSet,
+		},
+		&cli.StringFlag{
+			Name:        "mail-forward-bounce-path",
+			Usage:       "mail-forward-bounce-path",
 			EnvVars:     []string{"MAIL_FORWARD_BOUNCE_PATH"},
 			Value:       "",
 			Destination: &config.MailForwardBouncePath,
 		},
 
 		&cli.StringFlag{
-			Name:        "log-output",
-			Usage:       "Log Output (text, json)",
+			Name:        "mail-forward-as-name",
+			Usage:       "mail-forward-as-name",
 			EnvVars:     []string{"MAIL_FORWARD_AS_NAME"},
 			Value:       "",
 			Destination: &config.MailForwardAsName,
 		},
 		&cli.StringFlag{
-			Name:        "log-output",
-			Usage:       "Log Output (text, json)",
+			Name:        "mail-forward-as-email",
+			Usage:       "mail-forward-as-email",
 			EnvVars:     []string{"MAIL_FORWARD_AS_EMAIL"},
 			Value:       "",
 			Destination: &config.MailForwardAsEmail,
 		},
 		&cli.StringFlag{
-			Name:        "log-output",
-			Usage:       "Log Output (text, json)",
+			Name:        "mail-forward-to-name",
+			Usage:       "mail-forward-to-name",
 			EnvVars:     []string{"MAIL_FORWARD_TO_NAME"},
 			Value:       "",
 			Destination: &config.MailForwardToName,
 		},
 		&cli.StringFlag{
-			Name:        "log-output",
-			Usage:       "Log Output (text, json)",
+			Name:        "mail-forward-to-email",
+			Usage:       "mail-forward-to-email",
 			EnvVars:     []string{"MAIL_FORWARD_TO_EMAIL"},
 			Value:       "",
 			Destination: &config.MailForwardToEmail,
@@ -104,8 +107,9 @@ func appAction(cliCtx *cli.Context) error {
 	errorGroup, ctx := errgroup.WithContext(ctx)
 
 	errorGroup.Go(func() error {
-		handler := emailLambda.EmailForwarder(ctx, emailLambda.MailConfig{
+		handler := lambda.EmailForwarder(ctx, lambda.MailConfig{
 			Bucket:            config.MailBucket,
+			ConfigurationSet:  config.MailConfigurationSet,
 			ForwardBouncePath: config.MailForwardBouncePath,
 
 			ForwardToName:  config.MailForwardToEmail,
@@ -115,7 +119,7 @@ func appAction(cliCtx *cli.Context) error {
 			ForwardAsEmail: config.MailForwardAsEmail,
 		})
 
-		lambda.Start(handler)
+		awsLambda.Start(handler)
 		return nil
 	})
 
@@ -123,7 +127,6 @@ func appAction(cliCtx *cli.Context) error {
 }
 
 func main() {
-	lambda.Start(ReceiveMail)
 	app := cli.NewApp()
 	app.Flags = appFlags
 	app.Name = "email-forwarder"

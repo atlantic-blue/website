@@ -16,6 +16,9 @@ zip: build
 
 .PHONY: build
 build:
+	GOARCH=amd64 GOOS=linux CGO_ENABLED=0 go build -o $(SERVICE)
+
+dev-build:
 	CGO_ENABLED=0 go build -o $(SERVICE)
 
 .PHONY: dev

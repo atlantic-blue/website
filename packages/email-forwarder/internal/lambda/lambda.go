@@ -12,10 +12,17 @@ import (
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/aws/aws-sdk-go/service/ses"
 	"github.com/jhillyerd/enmime"
+	"github.com/sirupsen/logrus"
 )
 
 type MailConfig struct {
-	Bucket            string
+	// Emails are stored in a bucket
+	Bucket string
+
+	// Group that sends the email
+	ConfigurationSet string
+
+	// Email to bounce to
 	ForwardBouncePath string
 
 	ForwardAsName  string
@@ -100,6 +107,7 @@ func EmailForwarder(ctx context.Context, config MailConfig) func(event events.Si
 				Key:    aws.String(record.SES.Mail.MessageID),
 			})
 			if err != nil {
+				logrus.WithFields(logrus.Fields{"Bucket": config.Bucket, "Key": record.SES.Mail.MessageID}).Error("could not get object: %w", err)
 				return nil, fmt.Errorf("could not get object: %w", err)
 			}
 
@@ -110,7 +118,7 @@ func EmailForwarder(ctx context.Context, config MailConfig) func(event events.Si
 
 			// SEND EMAIL
 			_, err = mailClient.SendRawEmail(&ses.SendRawEmailInput{
-				ConfigurationSetName: aws.String("mailing-default"),
+				ConfigurationSetName: aws.String(config.ConfigurationSet),
 				RawMessage: &ses.RawMessage{
 					Data: re,
 				},
