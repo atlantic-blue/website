@@ -38,7 +38,7 @@ const getOption = (key: string) => {
 }
 
 const Header = () => {
-    const langPath = location.pathname.split("/")[1]
+    const langPath = window && window.location.pathname.split("/")[1]
     const currentLanguage = Object.keys(ResourceStringLanguage)
         .find(key => ResourceStringLanguage[key] === langPath) || "ENGLISH"
 
@@ -55,7 +55,7 @@ const Header = () => {
                     <Dropdown
                         onSelect={(selected) => {
                             const lang = selected.value
-                            const pathnames = location.pathname.split("/")
+                            const pathnames = window.location.pathname.split("/")
                             if (lang === ResourceStringLanguage.ENGLISH) {
                                 pathnames.splice(1, 1)
                             } else {
