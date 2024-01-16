@@ -1,27 +1,24 @@
 import React from "react"
 
-import { Header } from "../../components/Header/Header"
-import { Footer } from "../../components/Footer/Footer"
 import { ResourceStringLanguage } from "../../resourceStrings/types"
-import { resourceStrings } from "../../resourceStrings/home"
+import { homeResourceStrings } from "../../resourceStrings/home"
 import { Body } from "./Body/Body"
 
 import "../App.module.scss"
+import { Page } from "../../components/Page/Page"
 
-interface PageHomeProps {
+interface TemplateHomeProps {
     language: ResourceStringLanguage
 }
 
-const PageHome: React.FC<PageHomeProps> = (props) => {
-    const resourceStringsBody = resourceStrings[props.language]
+const TemplateHome: React.FC<TemplateHomeProps> = (props) => {
+    const resourceStringsBody = homeResourceStrings[props.language]
 
     return (
-        <>
-            <Header></Header>
+        <Page>
             <Body resourceStrings={resourceStringsBody.home} />
-            <Footer></Footer>
-        </>
+        </Page>
     )
 }
 
-export { PageHome }
+export { TemplateHome }

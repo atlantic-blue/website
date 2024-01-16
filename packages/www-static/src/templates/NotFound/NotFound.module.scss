@@ -1,0 +1,15 @@
+.title {
+    font-size: large;
+}
+
+.content {
+    font-size: medium;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    line-height: 40px;
+    min-height: 80vh;
+}

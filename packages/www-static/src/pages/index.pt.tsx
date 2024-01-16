@@ -1,13 +1,13 @@
 import * as React from "react"
 import type { PageProps } from "gatsby"
 
-import { PageHome } from "../templates/Home/Home"
+import { TemplateHome } from "../templates/Home/Home"
 import { ResourceStringLanguage } from "../resourceStrings/types"
 
-const IndexPage: React.FC<PageProps> = () => {
+const PageIndex: React.FC<PageProps> = () => {
     return (
-        <PageHome language={ResourceStringLanguage.PORTUGUESE} />
+        <TemplateHome language={ResourceStringLanguage.PORTUGUESE} />
     )
 }
 
-export default IndexPage
+export default PageIndex

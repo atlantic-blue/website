@@ -42,11 +42,9 @@ const config: GatsbyConfig = {
         {
             resolve: 'gatsby-plugin-i18n',
             options: {
-                paths: "",
                 langKeyDefault: 'en',
                 langKeyForNull: 'en',
                 prefixDefault: false,
-
             }
         }
     ]

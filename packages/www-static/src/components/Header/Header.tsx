@@ -1,6 +1,7 @@
 import React from "react"
-import { Atlantic } from "../../Icons/atlantic"
+import { navigate } from "gatsby"
 
+import { Atlantic } from "../../Icons/atlantic"
 import { Dropdown } from "../Dropdown/Dropdown"
 import { IconGreatBritain } from "../../Icons/greatBritain";
 import { IconPortugal } from "../../Icons/portugal";
@@ -37,11 +38,9 @@ const getOption = (key: string) => {
 }
 
 const Header = () => {
-    // const navigate = useNavigate();
-    // const location = useLocation();
-    // const langPath = location.pathname.split("/")[1]
-    // const currentLanguage = Object.keys(ResourceStringLanguage)
-    //     .find(key => ResourceStringLanguage[key] === langPath) || "ENGLISH"
+    const langPath = location.pathname.split("/")[1]
+    const currentLanguage = Object.keys(ResourceStringLanguage)
+        .find(key => ResourceStringLanguage[key] === langPath) || "ENGLISH"
 
     return (
         <header className={styles.header}>
@@ -55,9 +54,17 @@ const Header = () => {
 
                     <Dropdown
                         onSelect={(selected) => {
-                            // navigate(`/${Object(ResourceStringLanguage)[selected.key as ResourceStringLanguage]}`)
+                            const lang = selected.value
+                            const pathnames = location.pathname.split("/")
+                            if (lang === ResourceStringLanguage.ENGLISH) {
+                                pathnames.splice(1, 1)
+                            } else {
+                                pathnames.splice(1, 1, lang)
+                            }
+                            const navigateTo = pathnames.join("/")
+                            navigate(navigateTo)
                         }}
-                        default={getOption("ENGLISH")}
+                        default={getOption(currentLanguage)}
                         options={
                             Object
                                 .keys(ResourceStringLanguage)

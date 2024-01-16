@@ -5,7 +5,7 @@ import * as styles from "./Footer.module.scss"
 
 const Footer = () => {
     return (
-        <div className={styles.footer}>
+        <footer className={styles.footer}>
             <div className={styles.footerGrid}>
                 <div className={styles.footerGridColumn}>
                     <a href="/" aria-label="Atlantic Blue Solutions" className={styles.footerLogo}>
@@ -19,7 +19,7 @@ const Footer = () => {
                 <div>
                 </div>
             </div>
-        </div>
+        </footer>
     )
 }
 

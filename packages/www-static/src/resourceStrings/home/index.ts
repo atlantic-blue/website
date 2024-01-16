@@ -6,7 +6,7 @@ import { resourceStringRu } from "./ru";
 import { ResourceStrings } from "./types";
 import { ResourceStringLanguage } from "../types";
 
-export const resourceStrings: Record<ResourceStringLanguage, ResourceStrings> = {
+export const homeResourceStrings: Record<ResourceStringLanguage, ResourceStrings> = {
     [ResourceStringLanguage.ENGLISH]: resourceStringEn,
     [ResourceStringLanguage.SPANISH]: resourceStringEs,
     [ResourceStringLanguage.FRENCH]: resourceStringFr,
