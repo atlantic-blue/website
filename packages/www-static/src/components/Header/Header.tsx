@@ -37,8 +37,10 @@ const getOption = (key: string) => {
     }
 }
 
+const isBrowser = () => typeof window !== "undefined"
+
 const Header = () => {
-    const langPath = window && window.location.pathname.split("/")[1]
+    const langPath = isBrowser() && window.location.pathname.split("/")[1]
     const currentLanguage = Object.keys(ResourceStringLanguage)
         .find(key => ResourceStringLanguage[key] === langPath) || "ENGLISH"
 
@@ -55,7 +57,7 @@ const Header = () => {
                     <Dropdown
                         onSelect={(selected) => {
                             const lang = selected.value
-                            const pathnames = window.location.pathname.split("/")
+                            const pathnames = isBrowser() ? window.location.pathname.split("/") : []
                             if (lang === ResourceStringLanguage.ENGLISH) {
                                 pathnames.splice(1, 1)
                             } else {
