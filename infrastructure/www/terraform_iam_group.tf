@@ -12,6 +12,7 @@ data "aws_iam_policy_document" "developers_policy_document" {
 
       "cloudfront:Get*",
       "cloudfront:List*",
+      "cloudfront:UpdateDistribution",
 
       "ses:Get*",
       "ses:List*",
@@ -28,6 +29,7 @@ data "aws_iam_policy_document" "developers_policy_document" {
 
       "lambda:Get*",
       "lambda:List*",
+      "lambda:UpdateFunctionCode",
 
       "logs:Get*",
       "logs:List*",
