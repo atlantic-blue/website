@@ -220,6 +220,7 @@ resource "aws_iam_role" "email_lambda" {
   }
 }
 
+# Archive lambda function
 data "archive_file" "email_lambda" {
   type        = "zip"
   source_dir  = "${path.module}/email-forwarder"

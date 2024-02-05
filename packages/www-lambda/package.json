@@ -1,0 +1,17 @@
+{
+    "name": "yes",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "build": "tsc --outDir dist",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "@types/aws-lambda": "^8.10.133",
+        "aws-lambda": "^1.0.7",
+        "typescript": "^5.3.3"
+    }
+}
