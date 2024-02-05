@@ -18,7 +18,7 @@ resource "aws_cloudfront_distribution" "www_lambda" {
     target_origin_id = aws_lambda_function.www_lambda.function_name
 
     forwarded_values {
-      query_string = false
+      query_string = true
 
       cookies {
         forward = "none"
