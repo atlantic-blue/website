@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'packages/www-lambda/**'
+      # - 'packages/www-lambda/**'
 
 jobs:
   deploy:
