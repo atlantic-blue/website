@@ -4,15 +4,29 @@ import {
 } from "react-router-dom";
 
 import { useConfig } from "../components/ConfigContext";
+import { ResourceStringLanguage } from "../resourceStrings/types";
+
 import HelpPage from "../pages/Help";
-import HomePage from "../pages/Home";
+import { PageHome } from "../pages/Home/Home";
+
+import "./App.scss"
+
+const languages = (Object.keys(ResourceStringLanguage) as Array<keyof typeof ResourceStringLanguage>);
 
 const App: React.FC = () => {
     const config = useConfig();
     return (
         <Routes>
             <Route path="/help" element={<HelpPage />} />
-            <Route path="*" element={<HomePage />} />
+            {languages.map((key) => {
+                return (
+                    <Route
+                        path={`/${ResourceStringLanguage[key]}`}
+                        element={<PageHome language={ResourceStringLanguage[key]} />}
+                    />
+                )
+            })}
+            <Route path="*" element={<PageHome language={ResourceStringLanguage.ENGLISH} />} />
         </Routes>
     );
 }

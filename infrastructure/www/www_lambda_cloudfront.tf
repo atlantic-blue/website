@@ -1,4 +1,19 @@
+resource "aws_cloudfront_origin_access_identity" "www_lambda" {
+  comment = "access_identity_${local.www_lambda_bucket_name}"
+}
+
+
 resource "aws_cloudfront_distribution" "www_lambda" {
+  # Point to S3 BUCKET
+  origin {
+    domain_name = aws_s3_bucket.www_lambda.bucket_regional_domain_name
+    origin_id   = local.www_lambda_s3_origin_id
+
+    s3_origin_config {
+      origin_access_identity = aws_cloudfront_origin_access_identity.www_lambda.cloudfront_access_identity_path
+    }
+  }
+
   origin {
     # This is required because "domain_name" needs to be in a specific format
     domain_name = replace(replace(aws_lambda_function_url.www_lambda.function_url, "https://", ""), "/", "")
@@ -19,6 +34,69 @@ resource "aws_cloudfront_distribution" "www_lambda" {
 
     forwarded_values {
       query_string = true
+
+      cookies {
+        forward = "none"
+      }
+    }
+
+    viewer_protocol_policy = "redirect-to-https"
+    min_ttl                = 0
+    default_ttl            = 0
+    max_ttl                = 0
+    compress               = true
+  }
+
+  ordered_cache_behavior {
+    path_pattern     = "/assets/*"
+    allowed_methods  = ["GET", "HEAD", "OPTIONS"]
+    cached_methods   = ["GET", "HEAD", "OPTIONS"]
+    target_origin_id = local.www_lambda_s3_origin_id
+    forwarded_values {
+      query_string = false
+      headers      = ["Origin"]
+
+      cookies {
+        forward = "none"
+      }
+    }
+
+    viewer_protocol_policy = "redirect-to-https"
+    min_ttl                = 0
+    default_ttl            = 0
+    max_ttl                = 0
+    compress               = true
+  }
+
+  ordered_cache_behavior {
+    path_pattern     = "*.js*"
+    allowed_methods  = ["GET", "HEAD", "OPTIONS"]
+    cached_methods   = ["GET", "HEAD", "OPTIONS"]
+    target_origin_id = local.www_lambda_s3_origin_id
+    forwarded_values {
+      query_string = false
+      headers      = ["Origin"]
+
+      cookies {
+        forward = "none"
+      }
+    }
+
+    viewer_protocol_policy = "redirect-to-https"
+    min_ttl                = 0
+    default_ttl            = 0
+    max_ttl                = 0
+    compress               = true
+  }
+
+  ordered_cache_behavior {
+    path_pattern     = "*.css*"
+    allowed_methods  = ["GET", "HEAD", "OPTIONS"]
+    cached_methods   = ["GET", "HEAD", "OPTIONS"]
+    target_origin_id = local.www_lambda_s3_origin_id
+    forwarded_values {
+      query_string = false
+      headers      = ["Origin"]
 
       cookies {
         forward = "none"

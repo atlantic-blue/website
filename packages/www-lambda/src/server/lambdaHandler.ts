@@ -1,11 +1,23 @@
 import { LambdaFunctionURLEvent, APIGatewayProxyResultV2 } from "aws-lambda";
 
-const handler = async (
+import render from "./render";
+
+const createBody = async (event: LambdaFunctionURLEvent) => {
+    const assets = (await import("../../dist/stats.json")).default
+    return render(event, assets)
+}
+
+const lambdaHandler = async (
     event: LambdaFunctionURLEvent,
 ): Promise<APIGatewayProxyResultV2> => {
-    const lambdaHandler = (await import("./server/lambdaHandler")).default
     try {
-        return lambdaHandler(event)
+        return {
+            statusCode: 200,
+            headers: {
+                "Content-Type": "text/html",
+            },
+            body: await createBody(event),
+        }
     } catch (error) {
         // Custom error handling for server-side errors
         console.error(error);
@@ -20,5 +32,6 @@ const handler = async (
 }
 
 export {
-    handler,
+    createBody,
+    lambdaHandler as default
 }

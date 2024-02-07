@@ -7,7 +7,15 @@ import { Helmet } from "react-helmet";
 import Html from "./html";
 import App from "../app/main";
 
-const render = async (event: LambdaFunctionURLEvent) => {
+interface Assets {
+    scripts: string[]
+    styles: string[]
+}
+
+const render = async (
+    event: LambdaFunctionURLEvent,
+    assets: Assets
+) => {
     const body = renderToString(
         <StaticRouter location={event.rawPath}>
             <App />
@@ -22,6 +30,9 @@ const render = async (event: LambdaFunctionURLEvent) => {
         ${helmet.title.toString()}
         ${helmet.meta.toString()}
         ${helmet.link.toString()}
+
+        ${assets.styles.map(filename => `<link rel="stylesheet" href="/${filename}" />`).join('\n')}
+        ${assets.scripts.map(filename => `<script src="/${filename}"></script>`).join('\n')}
     `
 
     return Html({

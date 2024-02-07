@@ -16,9 +16,13 @@ const Html = ({
         <!DOCTYPE html>
         <html ${htmlAttributes}>
 
-        <head>${head}</head>
+        <head>
+            ${head}
+        </head>
 
-        <body ${bodyAttributes}>${body}</body>
+        <body ${bodyAttributes} id="main">
+            ${body}
+        </body>
 
         </html >
     `

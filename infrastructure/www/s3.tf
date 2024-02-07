@@ -43,3 +43,7 @@ resource "aws_s3_bucket" "www_bucket" {
     managedBy   = "${lookup(local.tags, "managed_by")}"
   }
 }
+
+output "www_bucket" {
+  value = aws_s3_bucket.www_bucket.id
+}

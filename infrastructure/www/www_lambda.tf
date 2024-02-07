@@ -1,7 +1,8 @@
 # Archive lambda function
 data "archive_file" "www_lambda" {
   type        = "zip"
-  source_dir  = "${path.module}/www-lambda/dist"
+  # The output directory of the lambda
+  source_dir  = "${path.module}/www-lambda/dist-server"
   output_path = "www_lambda.zip"
 }
 

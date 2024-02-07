@@ -32,10 +32,6 @@ resource "aws_iam_access_key" "www_user" {
   user = aws_iam_user.www_user.name
 }
 
-output "www_bucket" {
-  value = aws_s3_bucket.www_bucket.id
-}
-
 output "www_access_key_id" {
   value = aws_iam_access_key.www_user.id
 }

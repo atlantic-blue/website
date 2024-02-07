@@ -1,6 +1,10 @@
 import * as path from 'path'
 import { Configuration } from 'webpack'
 
+import jsRule from './rules/jsRule'
+import { serverSideCss } from './rules/cssRule'
+import urlRule from './rules/urlRule'
+
 export interface WebpackPaths {
     root: string
     src: string
@@ -11,11 +15,11 @@ const createWebpackPaths = (root: string): WebpackPaths => {
     return {
         root,
         src: path.resolve(root, 'src', 'index'),
-        build: path.resolve(root, 'dist'),
+        build: path.resolve(root, 'dist-server'),
     }
 }
 
-const PATH_ROOT = path.resolve(__dirname)
+const PATH_ROOT = path.resolve(__dirname, "..", "..")
 
 const createWebpackConfig = (): Configuration => {
     const paths = createWebpackPaths(PATH_ROOT)
@@ -35,19 +39,9 @@ const createWebpackConfig = (): Configuration => {
         devtool: "nosources-source-map",
         module: {
             rules: [
-                {
-                    test: /\.(ts|js)x?$/,
-                    exclude: /node_modules/, // we shouldn't need processing `node_modules`
-                    use: "babel-loader",
-                },
-                {
-                    test: /\.css$/,
-                    use: "null-loader", // No server-side CSS processing
-                },
-                {
-                    test: /\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$/,
-                    use: "url-loader",
-                },
+                jsRule,
+                serverSideCss,
+                urlRule,
             ],
         },
         resolve: {
