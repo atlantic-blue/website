@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-    paths:
+    # paths:
       # - 'packages/www-lambda/**'
 
 jobs:
@@ -78,7 +78,10 @@ jobs:
           cd infrastructure/www
 
           # workaround for symlinking
-          mkdir -p www-lambda/
-          cp -R packages/www-lambda/dist-server www-lambda
+          ls -al
+          mkdir -p www-lambda/dist-server
+          cd
+          ls -al
+          mv packages/www-lambda/dist-server www-lambda/dist-server
 
           terraform plan
