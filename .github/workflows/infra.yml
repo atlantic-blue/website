@@ -3,7 +3,7 @@ name: INFRA
 on:
   push:
     branches:
-      - main
+      # - main
     paths:
       - 'infrastructure/www/**'
 
