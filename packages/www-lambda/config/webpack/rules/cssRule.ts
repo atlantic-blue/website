@@ -5,7 +5,6 @@ const sassCss: RuleSetRule = {
     test: /\.s[ac]ss$/i,
     use: [
         MiniCssExtractPlugin.loader,
-        // 'style-loader',
         {
             loader: 'css-loader',
             options: {

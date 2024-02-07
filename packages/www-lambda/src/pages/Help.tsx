@@ -1,14 +1,15 @@
 import React from "react"
 import { Helmet } from "react-helmet";
 
+import HelmetBase from "../components/Helmet/Helmet";
+
 const HelpPage: React.FC = () => {
     return (
         <div>
-            <Helmet>
+            <HelmetBase>
                 <html lang="es" />
-                <title>Help Page</title>
                 <body className="root help" />
-            </Helmet>
+            </HelmetBase>
             I am a help page
         </div>
     )

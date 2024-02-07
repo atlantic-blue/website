@@ -25,8 +25,6 @@ const render = async (
     const helmet = Helmet.renderStatic();
 
     const head = `
-        <meta charset="utf-8">
-        <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
         ${helmet.title.toString()}
         ${helmet.meta.toString()}
         ${helmet.link.toString()}
