@@ -1,6 +1,9 @@
 interface HtmlProps {
     head: string;
-    body: string;
+    body: {
+        main: string
+        scripts: string
+    }
     htmlAttributes: string
     bodyAttributes: string
 }
@@ -20,8 +23,11 @@ const Html = ({
             ${head}
         </head>
 
-        <body ${bodyAttributes} id="main">
-            ${body}
+        <body ${bodyAttributes}>
+            <main id="main">
+                ${body.main}
+            </main>
+            ${body.scripts}
         </body>
 
         </html >

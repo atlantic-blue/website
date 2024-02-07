@@ -1,6 +1,6 @@
 import React from "react";
 import {
-    Routes, Route,
+    Routes, Route
 } from "react-router-dom";
 
 import { useConfig } from "../components/ConfigContext";
@@ -15,12 +15,14 @@ const languages = (Object.keys(ResourceStringLanguage) as Array<keyof typeof Res
 
 const App: React.FC = () => {
     const config = useConfig();
+
     return (
         <Routes>
             <Route path="/help" element={<HelpPage />} />
             {languages.map((key) => {
                 return (
                     <Route
+                        key={key}
                         path={`/${ResourceStringLanguage[key]}`}
                         element={<PageHome language={ResourceStringLanguage[key]} />}
                     />

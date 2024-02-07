@@ -4,12 +4,8 @@ import { Configuration } from 'webpack'
 import jsRule from './rules/jsRule'
 import { serverSideCss } from './rules/cssRule'
 import urlRule from './rules/urlRule'
+import { WebpackPaths } from './types'
 
-export interface WebpackPaths {
-    root: string
-    src: string
-    build: string
-}
 
 const createWebpackPaths = (root: string): WebpackPaths => {
     return {

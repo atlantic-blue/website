@@ -4,15 +4,11 @@ import CopyWebpackPlugin from 'copy-webpack-plugin'
 import { StatsWriterPlugin } from "webpack-stats-plugin"
 import MiniCssExtractPlugin from "mini-css-extract-plugin"
 
+import { WebpackArgs, WebpackPaths } from './types'
 import jsRule from './rules/jsRule'
 import cssRule from './rules/cssRule'
 import urlRule from './rules/urlRule'
-
-export interface WebpackPaths {
-    root: string
-    src: string
-    build: string
-}
+import createWebpackEnv from './utils/createWebpackEnv'
 
 const createWebpackPaths = (root: string): WebpackPaths => {
     return {
@@ -24,13 +20,15 @@ const createWebpackPaths = (root: string): WebpackPaths => {
 
 const PATH_ROOT = path.resolve(__dirname, "..", "..")
 
-const createWebpackConfig = (): Configuration => {
+const createWebpackConfig = (args: WebpackArgs): Configuration => {
+    const env = createWebpackEnv(args)
     const paths = createWebpackPaths(PATH_ROOT)
 
     return {
         target: "web",
         entry: paths.src,
-        mode: "production",
+        mode: env.isProduction() ? "production" : "development",
+        devtool: env.isProduction() ? "cheap-module-source-map" : "nosources-source-map",
         optimization: {
             runtimeChunk: "single",
             splitChunks: {
@@ -56,7 +54,6 @@ const createWebpackConfig = (): Configuration => {
                 },
             },
         },
-        devtool: "nosources-source-map",
         performance: {
             // Turn off size warnings for entry points
             hints: false,

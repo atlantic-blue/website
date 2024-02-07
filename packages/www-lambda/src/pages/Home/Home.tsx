@@ -22,9 +22,9 @@ const PageHome: React.FC<PageHomeProps> = (props) => {
                 <title>Atlantic Blue - Software Development Solutions</title>
             </HelmetBase>
 
-            <Header></Header>
+            <Header />
             <Body resourceStrings={resourceStringsBody.home} />
-            <Footer></Footer>
+            <Footer />
         </>
     )
 }

@@ -16,7 +16,11 @@ const render = async (
     event: LambdaFunctionURLEvent,
     assets: Assets
 ) => {
-    const body = renderToString(
+    const state = {
+        timestamp: Date.now()
+    }
+
+    const staticMarkup = renderToString(
         <StaticRouter location={event.rawPath}>
             <App />
         </StaticRouter>
@@ -30,12 +34,21 @@ const render = async (
         ${helmet.link.toString()}
 
         ${assets.styles.map(filename => `<link rel="stylesheet" href="/${filename}" />`).join('\n')}
+    `
+
+    const scripts = `
         ${assets.scripts.map(filename => `<script src="/${filename}"></script>`).join('\n')}
+        <script id="server-side-sate">
+            window.__STATE__ = ${JSON.stringify(state)};
+        </script>
     `
 
     return Html({
         head,
-        body,
+        body: {
+            main: staticMarkup,
+            scripts,
+        },
         htmlAttributes: helmet.htmlAttributes.toString(),
         bodyAttributes: helmet.bodyAttributes.toString(),
     })
