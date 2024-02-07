@@ -9,6 +9,8 @@ import { ResourceStringLanguage } from "../resourceStrings/types";
 import HelpPage from "../pages/Help";
 import { PageHome } from "../pages/Home/Home";
 
+import '../analytics/mixpanel';
+
 import "./App.scss"
 
 const languages = (Object.keys(ResourceStringLanguage) as Array<keyof typeof ResourceStringLanguage>);

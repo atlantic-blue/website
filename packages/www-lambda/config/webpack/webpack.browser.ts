@@ -3,6 +3,7 @@ import { Configuration, WebpackPluginInstance } from 'webpack'
 import CopyWebpackPlugin from 'copy-webpack-plugin'
 import { StatsWriterPlugin } from "webpack-stats-plugin"
 import MiniCssExtractPlugin from "mini-css-extract-plugin"
+import Dotenv from "dotenv-webpack"
 
 import { WebpackArgs, WebpackPaths } from './types'
 import jsRule from './rules/jsRule'
@@ -66,6 +67,13 @@ const createWebpackConfig = (args: WebpackArgs): Configuration => {
             ],
         },
         plugins: [
+            /**
+             * .env
+             */
+            new Dotenv({
+                path: path.join(paths.root, '.env'),
+            }),
+
             /**
              * Add assets to dist
              */
