@@ -76,4 +76,9 @@ jobs:
       - name: TERRAFORM apply
         run: |
           cd infrastructure/www
+
+          # workaround for symlinking
+          mkdir -p www-lambda/
+          cp -R ../../packages/www-lambda/dist-server www-lambda
+
           terraform plan
