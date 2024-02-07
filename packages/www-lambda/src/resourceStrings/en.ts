@@ -2,6 +2,13 @@ import { ResourceStrings } from "./types";
 
 export const resourceStringEn: ResourceStrings = {
     home: {
+        head: {
+            title: "Atlantic Blue - Software Development Solutions",
+            meta: {
+                description: "Atlantic offers tailored software development solutions in London, UK. Our agile methodologies and expert technical support ensure high-quality software solutions for your business needs.",
+                keywords: "software development, London, UK, tailored solutions, agile methodology, technical support",
+            },
+        },
         section: {
             hero: {
                 title: "Elevate Your Business with Tailored Software Solutions",

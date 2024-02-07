@@ -19,7 +19,9 @@ const PageHome: React.FC<PageHomeProps> = (props) => {
         <>
             <HelmetBase>
                 <html lang={props.language} />
-                <title>Atlantic Blue - Software Development Solutions</title>
+                <title>{resourceStringsBody.home.head.title}</title>
+                <meta name="description" content={resourceStringsBody.home.head.meta.description} />
+                <meta name="keywords" content={resourceStringsBody.home.head.meta.keywords} />
             </HelmetBase>
 
             <Header />

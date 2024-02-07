@@ -8,6 +8,13 @@ export enum ResourceStringLanguage {
 
 export interface ResourceStrings {
     home: {
+        head: {
+            title: string
+            meta: {
+                description: string,
+                keywords: string,
+            },
+        }
         section: {
             hero: {
                 title: string

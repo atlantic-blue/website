@@ -2,6 +2,13 @@ import { ResourceStrings } from "./types";
 
 export const resourceStringFr: ResourceStrings = {
     home: {
+        head: {
+            title: "Atlantic Blue - Solutions de Développement Logiciel",
+            meta: {
+                description: "Atlantic propose des solutions de développement logiciel sur mesure à Londres, Royaume-Uni. Nos méthodologies agiles et notre support technique expert garantissent des solutions logicielles de haute qualité pour répondre aux besoins de votre entreprise.",
+                keywords: "développement logiciel, Londres, Royaume-Uni, solutions sur mesure, méthodologie agile, support technique",
+            },
+        },
         section: {
             hero: {
                 title: "Élevez votre entreprise avec des solutions logicielles sur mesure",
