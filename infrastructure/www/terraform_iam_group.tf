@@ -61,8 +61,8 @@ data "aws_iam_policy_document" "developers_policy_s3_document" {
     resources = [
       "${aws_s3_bucket.terraform_bucket.arn}",
       "${aws_s3_bucket.terraform_bucket.arn}/*",
-      "${aws_s3_bucket.www_bucket.arn}",
-      "${aws_s3_bucket.www_bucket.arn}/*",
+      "${aws_s3_bucket.www_lambda.arn}",
+      "${aws_s3_bucket.www_lambda.arn}/*",
       "${aws_s3_bucket.email_bucket.arn}",
       "${aws_s3_bucket.email_bucket.arn}/*"
     ]

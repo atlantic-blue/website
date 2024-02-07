@@ -22,8 +22,8 @@ data "aws_iam_policy_document" "www_user" {
     ]
 
     resources = [
-      "${aws_s3_bucket.www_bucket.arn}",
-      "${aws_s3_bucket.www_bucket.arn}/*"
+      "${aws_s3_bucket.www_lambda.arn}",
+      "${aws_s3_bucket.www_lambda.arn}/*"
     ]
   }
 }
