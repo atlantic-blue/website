@@ -78,7 +78,7 @@ jobs:
           # workaround for symlinking
           ls -al
           mkdir -p infrastructure/www/www-lambda/dist-server
-          mv packages/www-lambda/dist-server infrastructure/www/www-lambda/dist-server
+          mv packages/www-lambda/dist-server infrastructure/www/www-lambda
 
           cd infrastructure/www
           terraform plan
