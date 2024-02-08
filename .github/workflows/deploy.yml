@@ -75,5 +75,6 @@ jobs:
 
       - name: TERRAFORM apply
         run: |
+          ls -al infrastructure/www/www-lambda/dist-server
           cd infrastructure/www
           terraform plan
