@@ -32,7 +32,7 @@ jobs:
 
       - name: ADD BROWSER ENV VARS
         run: |
-          cd infrastructure/www/www-lambda
+          cd packages/www-lambda
 
           echo "
           MIXPANEL_TOKEN=$MIXPANEL_TOKEN
@@ -40,11 +40,11 @@ jobs:
 
       - name: BUILD BROWSER AND SERVER
         run: |
-          cd infrastructure/www/www-lambda && npm run build
+          cd packages/www-lambda && npm run build
 
       - name: DEPLOY BROWSER BUILD
         run: |
-          cd infrastructure/www/www-lambda/dist
+          cd packages/www-lambda/dist
           aws --version
           aws s3 sync . s3://$AWS_S3_BUCKET
 
