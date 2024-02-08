@@ -28,11 +28,11 @@ jobs:
 
       - name: INSTALL
         run: |
-          cd packages/www-lambda && npm ci
+          cd infrastructure/www/www-lambda && npm ci
 
       - name: ADD BROWSER ENV VARS
         run: |
-          cd packages/www-lambda
+          cd infrastructure/www/www-lambda
 
           echo "
           MIXPANEL_TOKEN=$MIXPANEL_TOKEN
@@ -40,11 +40,11 @@ jobs:
 
       - name: BUILD BROWSER AND SERVER
         run: |
-          cd packages/www-lambda && npm run build
+          cd infrastructure/www/www-lambda && npm run build
 
       - name: DEPLOY BROWSER BUILD
         run: |
-          cd packages/www-lambda/dist
+          cd infrastructure/www/www-lambda/dist
           aws --version
           aws s3 sync . s3://$AWS_S3_BUCKET
 
@@ -75,10 +75,5 @@ jobs:
 
       - name: TERRAFORM apply
         run: |
-          # workaround for symlinking
-          ls -al
-          mkdir -p infrastructure/www/www-lambda/dist-server
-          mv packages/www-lambda/dist-server infrastructure/www/www-lambda
-
           cd infrastructure/www
           terraform plan
