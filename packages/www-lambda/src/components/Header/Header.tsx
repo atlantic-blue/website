@@ -8,9 +8,9 @@ import { IconGreatBritain } from "../../icons/greatBritain";
 import { IconPortugal } from "../../icons/portugal";
 import { IconSpain } from "../../icons/spain";
 import { IconRussia } from "../../icons/russia";
+import { IconFrance } from "../../icons/france";
 
 import * as styles from "./Header.scss"
-import { IconFrance } from "../../icons/france";
 
 const countryImages = {
     [ResourceStringLanguage.ENGLISH]: <IconGreatBritain />,

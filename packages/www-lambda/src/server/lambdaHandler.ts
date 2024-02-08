@@ -3,7 +3,7 @@ import { LambdaFunctionURLEvent, APIGatewayProxyResultV2 } from "aws-lambda";
 import render from "./render";
 
 const createBody = async (event: LambdaFunctionURLEvent) => {
-    const assets = (await import("../../dist/stats.json")).default
+    const assets = (await import("../../dist/public/stats.json")).default
     return render(event, assets)
 }
 

@@ -16,7 +16,7 @@ const SectionHero = ({ resourceStrings }: { resourceStrings: ResourceStrings['ho
                     <div className={styles.sectionCtaBackground} />
                     <img
                         className={styles.sectionCtaBackgroundImg}
-                        src="/assets/screen.jpg" alt="screen" />
+                        src="/public/assets/screen.jpg" alt="screen" />
                 </div>
 
                 <div className={styles.sectionCtaContent}>
@@ -56,19 +56,19 @@ const SectionProducts = ({ resourceStrings }: { resourceStrings: ResourceStrings
         <section className={styles.sectionProducts}>
             <div className={styles.sectionProductsContainer}>
                 <Card
-                    img={{ src: "/assets/custom-software.jpg", alt: resourceStrings.solutions.imgAlt }}
+                    img={{ src: "/public/assets/custom-software.jpg", alt: resourceStrings.solutions.imgAlt }}
                     title={resourceStrings.solutions.title}
                     description={resourceStrings.solutions.description}
                 />
 
                 <Card
-                    img={{ src: "/assets/agile-methodology.jpg", alt: resourceStrings.methodology.imgAlt }}
+                    img={{ src: "/public/assets/agile-methodology.jpg", alt: resourceStrings.methodology.imgAlt }}
                     title={resourceStrings.methodology.title}
                     description={resourceStrings.methodology.description}
                 />
 
                 <Card
-                    img={{ src: "/assets/tech-support.jpg", alt: resourceStrings.support.imgAlt }}
+                    img={{ src: "/public/assets/tech-support.jpg", alt: resourceStrings.support.imgAlt }}
                     title={resourceStrings.support.title}
                     description={resourceStrings.support.description}
                 />
@@ -113,7 +113,7 @@ const SectionAbout = ({ resourceStrings }: { resourceStrings: ResourceStrings['h
                 >
                     <img
                         className={styles.sectionAboutBackgroundImg}
-                        src="/assets/setup.jpg" alt={resourceStrings.imgAlt} />
+                        src="/public/assets/setup.jpg" alt={resourceStrings.imgAlt} />
                 </div>
             </div>
         </section>

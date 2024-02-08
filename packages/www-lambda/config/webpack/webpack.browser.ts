@@ -15,7 +15,7 @@ const createWebpackPaths = (root: string): WebpackPaths => {
     return {
         root,
         src: path.resolve(root, 'src', 'browser', 'main.tsx'),
-        build: path.resolve(root, 'dist'),
+        build: path.resolve(root, 'dist', 'public'),
     }
 }
 
@@ -81,7 +81,7 @@ const createWebpackConfig = (args: WebpackArgs): Configuration => {
                 patterns: [
                     {
                         from: path.join(paths.root, 'assets'),
-                        to: path.join(paths.root, 'dist', 'assets'),
+                        to: path.join(paths.root, 'dist', 'public', 'assets'),
                     },
                 ],
             }),
@@ -103,10 +103,13 @@ const createWebpackConfig = (args: WebpackArgs): Configuration => {
                     const stats = JSON.stringify(
                         {
                             scripts: Object.entries(assets).flatMap(([_asset, files]) => {
-                                return files.filter((filename) => filename.endsWith(".js") && !/\.hot-update\./.test(filename));
+                                return files
+                                    .filter((filename) => filename.endsWith(".js") && !/\.hot-update\./.test(filename))
+                                    .map(filename => `public/${filename}`);
                             }),
                             styles: Object.entries(assets).flatMap(([_asset, files]) => {
-                                return files.filter((filename) => filename.endsWith(".css") && !/\.hot-update\./.test(filename));
+                                return files.filter((filename) => filename.endsWith(".css") && !/\.hot-update\./.test(filename))
+                                    .map(filename => `public/${filename}`);
                             }),
                         },
                         null,

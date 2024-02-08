@@ -12,7 +12,7 @@ const HelmetBase: React.FC<HelmetBaseProps> = (props) => {
             <meta charSet="UTF-8" />
             <meta name="viewport" content="width=device-width, initial-scale=1" />
             <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-            <link rel="icon" type="image/x-icon" href="/assets/logo.png" />
+            <link rel="icon" type="image/x-icon" href="/public/assets/atlantic-blue.png" />
             <title>Atlantic Blue - Software Development Solutions</title>
             <meta name="author" content="Atlantic Blue UK" />
 
