@@ -21,21 +21,22 @@ terraform init
 terraform apply -var stage=tf # tf.atlanticblue.solutions, a safe target
 ```
 
-## Read this before pointing production at it
+## Taking over the apex
 
-The old stack in `infrastructure/www` still owns the live distribution, and that distribution
-claims `atlanticblue.solutions` as an alias. CloudFront refuses to let two distributions claim the
-same alias, so `terraform apply -var stage=production` fails until the alias is removed from the
-old distribution.
+Production is the target and there is no staged subdomain step. The site has no traffic to lose
+yet, and giving it some is the point of the rebuild.
 
-The order that works:
+One thing still has to happen first, and it is an API refusal rather than caution. The old stack in
+`infrastructure/www` owns the live distribution, and that distribution claims
+`atlanticblue.solutions` as an alias. CloudFront does not allow two distributions to claim the
+same alias, so `terraform apply -var stage=production` fails with
+`CNAMEAlreadyExists` until the alias is released.
 
-1. Apply this stack with a stage subdomain. Check the site on it.
-2. Remove the alias from the old distribution, in `infrastructure/www`.
-3. Apply this stack with `stage=production`. The alias records use `allow_overwrite`, so they adopt
-   the apex.
-4. Only then retire the old stack. Issue #21 covers that, and it must leave the email forwarder
-   alone, because that is in use.
+Release it by removing the `aliases` block from the old distribution and applying that stack, or by
+retiring the old stack altogether. Issue #21 covers the retirement, and it must leave the email
+forwarder alone, because that is in use.
+
+The alias records here use `allow_overwrite`, so they adopt the apex as soon as the alias is free.
 
 ## Why the asset sync has no --delete
 
