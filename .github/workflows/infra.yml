@@ -1,0 +1,53 @@
+name: Infra (Terraform)
+
+# Terraform for the deploy bootstrap: the OpenID Connect provider, the deploy role and the
+# state bucket. A pull request that touches infra/bootstrap runs plan. Apply is a deliberate
+# manual run, because this stack holds the credentials everything else depends on.
+on:
+  pull_request:
+    paths:
+      - "infra/bootstrap/**"
+      - ".github/workflows/infra.yml"
+  workflow_dispatch:
+    inputs:
+      action:
+        description: plan or apply
+        type: choice
+        default: plan
+        options: [plan, apply]
+
+permissions:
+  id-token: write
+  contents: read
+
+concurrency:
+  group: infra-bootstrap
+  cancel-in-progress: false
+
+jobs:
+  bootstrap:
+    name: bootstrap (${{ github.event.inputs.action || 'plan' }})
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: infra/bootstrap
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.10.5"
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: us-east-1
+
+      - run: terraform fmt -check -recursive
+      - run: terraform init -no-color
+      - run: terraform validate -no-color
+      - run: terraform plan -no-color
+
+      - name: Apply
+        if: github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'apply'
+        run: terraform apply -auto-approve -no-color
