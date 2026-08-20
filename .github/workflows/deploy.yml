@@ -1,80 +1,114 @@
 name: Deploy
 
+# Builds the site with OpenNext and applies the site stack. A push to main deploys production.
+# A manual run can plan first.
+#
+# This replaces the previous workflow, which ended at `terraform plan` and never applied, and
+# which checked the repository out a second time after the build, deleting the artifact the
+# plan step then failed to find.
 on:
   push:
-    branches:
-      - main
-    # paths:
-      # - 'packages/www-lambda/**'
+    branches: [main]
+    paths:
+      - "packages/web/**"
+      - "infra/site/**"
+      - ".github/workflows/deploy.yml"
+  workflow_dispatch:
+    inputs:
+      stage:
+        description: stage to deploy
+        type: string
+        default: production
+      action:
+        description: plan or apply
+        type: choice
+        default: plan
+        options: [plan, apply]
+
+permissions:
+  id-token: write
+  contents: read
+
+concurrency:
+  group: deploy-${{ github.event.inputs.stage || 'production' }}
+  cancel-in-progress: false
 
 jobs:
   deploy:
+    name: deploy (${{ github.event.inputs.stage || 'production' }})
     runs-on: ubuntu-latest
     env:
-      AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
-      TERRAFORM_AWS_ACCESS_KEY_ID: ${{ secrets.TERRAFORM_AWS_ACCESS_KEY_ID }}
-      TERRAFORM_AWS_SECRET_ACCESS_KEY: ${{ secrets.TERRAFORM_AWS_SECRET_ACCESS_KEY }}
-      MIXPANEL_TOKEN: ${{ secrets.MIXPANEL_TOKEN }}
+      STAGE: ${{ github.event.inputs.stage || 'production' }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+      # Check out once. The previous workflow checked out again after building, which
+      # cleaned the tree and removed the build output.
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v6
         with:
-          node-version: 20
+          node-version-file: packages/web/.nvmrc
+          cache: npm
+          cache-dependency-path: packages/web/package-lock.json
 
-      - name: INSTALL
+      - name: Install
+        working-directory: packages/web
+        run: npm ci
+
+      # The gates run before anything is built or deployed. Each is its own step, so a
+      # red gate stops the job rather than scrolling past a deploy.
+      - name: Format
+        working-directory: packages/web
+        run: npm run format
+      - name: Lint
+        working-directory: packages/web
+        run: npm run lint
+      - name: Types
+        working-directory: packages/web
+        run: npm run types
+      - name: Test
+        working-directory: packages/web
+        run: npm run test
+
+      - name: Build with OpenNext
+        working-directory: packages/web
+        run: npm run build:opennext
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: us-east-1
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.10.5"
+
+      - name: Terraform init
+        working-directory: infra/site
+        run: terraform init -no-color
+
+      - name: Terraform plan
+        working-directory: infra/site
+        run: terraform plan -no-color -var stage=$STAGE
+
+      - name: Terraform apply
+        if: github.event_name == 'push' || github.event.inputs.action == 'apply'
+        working-directory: infra/site
+        run: terraform apply -auto-approve -no-color -var stage=$STAGE
+
+      # A green pipeline says the steps ran. It says nothing about whether the site works.
+      # Open the deployed thing and read what it says.
+      - name: Check the deployed site answers
+        if: github.event_name == 'push' || github.event.inputs.action == 'apply'
+        working-directory: infra/site
         run: |
-          cd infrastructure/www/www-lambda && npm ci
-
-      - name: ADD BROWSER ENV VARS
-        run: |
-          cd packages/www-lambda
-
-          echo "
-          MIXPANEL_TOKEN=$MIXPANEL_TOKEN
-          " > .env
-
-      - name: BUILD BROWSER AND SERVER
-        run: |
-          cd packages/www-lambda && npm run build
-
-      - name: DEPLOY BROWSER BUILD
-        run: |
-          cd packages/www-lambda/dist
-          aws --version
-          aws s3 sync . s3://$AWS_S3_BUCKET
-
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: TERRAFORM INSTALL
-        run: |
-          wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
-          echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
-          sudo apt update > /dev/null && sudo apt install -y terraform > /dev/null
-
-          terraform version
-
-      - name: AWS CONFIGURE
-        run: |
-          aws --version
-
-          mkdir -p ~/.aws
-          touch ~/.aws/credentials
-
-          aws configure set aws_access_key_id ${TERRAFORM_AWS_ACCESS_KEY_ID} --profile atlantic-blue-infra
-          aws configure set aws_secret_access_key ${TERRAFORM_AWS_SECRET_ACCESS_KEY} --profile atlantic-blue-infra
-
-      - name: TERRAFORM INIT
-        run: |
-          cd infrastructure/www
-          terraform init
-
-      - name: TERRAFORM apply
-        run: |
-          ls -al infrastructure/www/www-lambda/dist-server
-          cd infrastructure/www
-          terraform plan
+          set -euo pipefail
+          url="$(terraform output -raw url)"
+          echo "checking $url"
+          code=$(curl -sS -o /tmp/home.html -w '%{http_code}' --retry 5 --retry-delay 10 --retry-all-errors "$url/")
+          test "$code" = "200"
+          grep -q "<h1" /tmp/home.html
+          missing=$(curl -sS -o /dev/null -w '%{http_code}' "$url/this-address-does-not-exist")
+          echo "unknown address returned $missing"
+          test "$missing" = "404"
+          curl -sSI "$url/" | grep -i "strict-transport-security"
+          echo "deployed site answers, returns 404 for an unknown address, and sends security headers"
