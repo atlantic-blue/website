@@ -1,0 +1,55 @@
+name: Web
+
+on:
+  pull_request:
+    paths:
+      - "packages/web/**"
+      - ".github/workflows/web.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "packages/web/**"
+      - ".github/workflows/web.yml"
+
+jobs:
+  gates:
+    name: Format, lint, types and tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/web
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: packages/web/.nvmrc
+          cache: npm
+          cache-dependency-path: packages/web/package-lock.json
+
+      - run: npm ci
+
+      # Each gate is its own step so a failure names itself in the log. Never
+      # pipe a gate anywhere: a pipeline reports the status of its last command.
+      - run: npm run format
+      - run: npm run lint
+      - run: npm run types
+
+      # The tests build the app, start the real server and make real requests,
+      # so this step covers `next build` as well as the assertions.
+      - run: npm run test
+
+      # The bundle that deploys is not the build that just passed. A compiler
+      # proves the code is consistent; it says nothing about whether the Lambda
+      # bundle can be produced. Build it here so a broken bundle fails on the
+      # pull request rather than at deploy time.
+      - run: npm run build:opennext
+
+      - name: Check the bundle carries what the deploy expects
+        run: |
+          set -euo pipefail
+          test -f .open-next/assets/BUILD_ID
+          test -f .open-next/server-functions/default/index.mjs
+          test -d .open-next/image-optimization-function
+          echo "bundle contents present"

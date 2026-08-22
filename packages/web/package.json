@@ -1,0 +1,39 @@
+{
+    "name": "@atlantic-blue/web",
+    "version": "0.1.0",
+    "private": true,
+    "engines": {
+        "node": ">=22"
+    },
+    "scripts": {
+        "dev": "next dev",
+        "build": "next build",
+        "build:opennext": "open-next build",
+        "start": "next start",
+        "types": "tsc --noEmit",
+        "lint": "eslint",
+        "format": "prettier --check .",
+        "format:write": "prettier --write .",
+        "test": "vitest run",
+        "gates": "npm run format && npm run lint && npm run types && npm run test"
+    },
+    "dependencies": {
+        "next": "16.2.11",
+        "react": "19.2.4",
+        "react-dom": "19.2.4"
+    },
+    "devDependencies": {
+        "@opennextjs/aws": "^4.0.3",
+        "@testing-library/jest-dom": "^6.9.1",
+        "@testing-library/react": "^16.3.2",
+        "@types/node": "^22",
+        "@types/react": "^19",
+        "@types/react-dom": "^19",
+        "eslint": "^9",
+        "eslint-config-next": "16.2.11",
+        "jsdom": "^26.1.0",
+        "prettier": "^3.6.2",
+        "typescript": "^5",
+        "vitest": "^3.2.7"
+    }
+}
