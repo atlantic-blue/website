@@ -93,6 +93,23 @@ describe("the design system", () => {
         expect(body).not.toMatch(/fonts\.googleapis\.com|fonts\.gstatic\.com|cdn\./)
     })
 
+    // Not loading a font from elsewhere is half the check. The other half is that
+    // ours actually resolve. They 404ed in production because CloudFront had no
+    // route for /fonts and sent the request to the server function.
+    it("serves every face it asks for", async () => {
+        const stylesheet = body.match(/href="(\/_next\/static\/[^"]+\.css)"/)?.[1]
+        expect(stylesheet).toBeDefined()
+
+        const css = await (await fetch(`${baseUrl}${stylesheet}`)).text()
+        const faces = [...css.matchAll(/url\((\/fonts\/[^)]+\.woff2)\)/g)].map((m) => m[1])
+        expect(faces.length).toBeGreaterThan(0)
+
+        for (const face of faces) {
+            const response = await fetch(`${baseUrl}${face}`)
+            expect(response.status, `${face} did not resolve`).toBe(200)
+        }
+    })
+
     it("names the clients we are allowed to name", () => {
         for (const name of ["ITV", "Sky", "DAZN", "castLabs"]) {
             expect(body).toContain(name)

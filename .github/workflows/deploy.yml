@@ -120,4 +120,18 @@ jobs:
           echo "second request: $hit"
           echo "$hit" | grep -qi "Hit from cloudfront"
 
-          echo "deployed site answers, returns 404, sends security headers, and caches at the edge"
+          # A face that 404s leaves the site rendering in a fallback and looking unfinished,
+          # and no application test can see it: next start serves public/ directly, while in
+          # production CloudFront has to route /fonts to the bucket. Check it here.
+          css=$(grep -oE "/_next/static/[^\"]+\.css" /tmp/home.html | head -1)
+          test -n "$css"
+          curl -sS "$url$css" -o /tmp/site.css
+          faces=$(grep -oE "/fonts/[^)]+\.woff2" /tmp/site.css | sort -u)
+          test -n "$faces"
+          for face in $faces; do
+            code=$(curl -sS -o /dev/null -w "%{http_code}" "$url$face")
+            echo "  $face -> $code"
+            test "$code" = "200"
+          done
+
+          echo "deployed site answers, returns 404, sends security headers, caches at the edge, and serves its faces"
