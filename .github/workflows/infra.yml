@@ -1,0 +1,69 @@
+name: Infra (Terraform)
+
+# Terraform for the deploy bootstrap: the OpenID Connect provider, the deploy role and the
+# state bucket. A pull request that touches infra/bootstrap checks the formatting and validates
+# the configuration. It plans as well once credentials exist. Apply is a deliberate manual run,
+# because this stack holds the credentials everything else depends on.
+on:
+  pull_request:
+    paths:
+      - "infra/bootstrap/**"
+      - ".github/workflows/infra.yml"
+  workflow_dispatch:
+    inputs:
+      action:
+        description: plan or apply
+        type: choice
+        default: plan
+        options: [plan, apply]
+
+permissions:
+  id-token: write
+  contents: read
+
+concurrency:
+  group: infra-bootstrap
+  cancel-in-progress: false
+
+jobs:
+  bootstrap:
+    name: bootstrap (${{ github.event.inputs.action || 'check' }})
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: infra/bootstrap
+    env:
+      # This stack creates the role, so before the first apply there is no role to assume.
+      # The checks that need no credentials still run, and the plan starts working the moment
+      # the secret exists.
+      DEPLOY_ROLE_ARN: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.10.5"
+
+      - run: terraform fmt -check -recursive
+      - run: terraform init -backend=false -no-color
+      - run: terraform validate -no-color
+
+      - name: Report that the plan is skipped
+        if: env.DEPLOY_ROLE_ARN == ''
+        run: |
+          echo "AWS_DEPLOY_ROLE_ARN is not set, so this run checked the configuration only."
+          echo "Apply infra/bootstrap once by hand, then set the secret. See infra/bootstrap/README.md."
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        if: env.DEPLOY_ROLE_ARN != ''
+        with:
+          role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: us-east-1
+
+      - name: Plan
+        if: env.DEPLOY_ROLE_ARN != ''
+        run: terraform plan -no-color
+
+      - name: Apply
+        if: env.DEPLOY_ROLE_ARN != '' && github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'apply'
+        run: terraform apply -auto-approve -no-color
