@@ -207,3 +207,31 @@ describe("mobile layout", () => {
         expect(widths.size).toBeGreaterThan(2)
     })
 })
+
+describe("imagery", () => {
+    it("serves the image through the optimiser, in a modern format", async () => {
+        const { body } = await get("/")
+        const src = body.match(/src="(\/_next\/image[^"]*)"/)?.[1]?.replace(/&amp;/g, "&")
+        expect(src, "no optimised image on the page").toBeDefined()
+
+        const response = await fetch(`${baseUrl}${src}`, {
+            headers: { accept: "image/avif,image/webp,image/*" },
+        })
+        expect(response.status).toBe(200)
+        expect(response.headers.get("content-type")).toMatch(/avif|webp/)
+    })
+
+    it("gives the image dimensions, so nothing shifts as it loads", async () => {
+        const { body } = await get("/")
+        const tag = body.match(/<img[^>]*_next\/image[^>]*>/)?.[0] ?? ""
+        expect(tag).toMatch(/width="\d+"/)
+        expect(tag).toMatch(/height="\d+"/)
+    })
+
+    it("describes the image for somebody who cannot see it", async () => {
+        const { body } = await get("/")
+        const tag = body.match(/<img[^>]*_next\/image[^>]*>/)?.[0] ?? ""
+        const alt = tag.match(/alt="([^"]*)"/)?.[1] ?? ""
+        expect(alt.length).toBeGreaterThan(20)
+    })
+})
