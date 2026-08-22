@@ -175,3 +175,35 @@ describe("the service pages", () => {
         }
     })
 })
+
+describe("mobile layout", () => {
+    // The header needed about 438px before this: a wordmark, two text links and
+    // a button, all unconditional. The narrowest phone in common use is 320.
+    it("hides the text navigation below the small breakpoint", async () => {
+        const { body } = await get("/")
+        const header = body.match(/<header[\s\S]*?<\/header>/)?.[0] ?? ""
+        expect(header).toContain(">Services<")
+        expect(header).toMatch(/class="[^"]*hidden[^"]*sm:inline[^"]*"[^>]*>Services</)
+    })
+
+    it("keeps the call to action visible at every width", async () => {
+        const { body } = await get("/")
+        const header = body.match(/<header[\s\S]*?<\/header>/)?.[0] ?? ""
+        expect(header).toContain("Book a call")
+        expect(header).not.toMatch(/class="[^"]*hidden[^"]*"[^>]*>Book a call</)
+    })
+
+    // Overriding --spacing scales every utility on every element at once.
+    it("does not redefine the Tailwind spacing unit", async () => {
+        const stylesheet = (await get("/")).body.match(/href="(\/_next\/static\/[^"]+\.css)"/)?.[1]
+        const css = await (await fetch(`${baseUrl}${stylesheet}`)).text()
+        expect(css).not.toMatch(/--spacing:\s*8px/)
+    })
+
+    it("has breakpoints beyond the single one it shipped with", async () => {
+        const stylesheet = (await get("/")).body.match(/href="(\/_next\/static\/[^"]+\.css)"/)?.[1]
+        const css = await (await fetch(`${baseUrl}${stylesheet}`)).text()
+        const widths = new Set([...css.matchAll(/min-width:\s*([\d.]+rem)/g)].map((m) => m[1]))
+        expect(widths.size).toBeGreaterThan(2)
+    })
+})

@@ -3,6 +3,7 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 
 import { Button } from "@/components/ui/button"
+import { Eyebrow, Heading, Lede, Section, Title } from "@/components/ui/section"
 import { serviceBySlug, services } from "@/lib/services"
 import { company } from "@/lib/site"
 
@@ -78,26 +79,22 @@ const ServicePage = async ({ params }: Params) => {
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
             />
 
-            <section className="mx-auto max-w-[1180px] px-3 pt-12 pb-8">
-                <p className="font-mono text-xs uppercase tracking-[0.12em] text-dim">
+            <Section className="pt-12 sm:pt-20">
+                <Eyebrow>
                     <Link href="/services" className="text-dim hover:text-ink">
                         Services
                     </Link>{" "}
                     / {service.name}
-                </p>
-                <h1 className="mt-3 max-w-[18ch] text-[clamp(2.4rem,5.2vw,4.2rem)] leading-[1.02] tracking-[-0.035em]">
-                    {service.name}
-                </h1>
-                <p className="mt-3 max-w-[58ch] text-lg text-dim">{service.problem}</p>
-            </section>
+                </Eyebrow>
+                <Title className="max-w-[18ch]">{service.name}</Title>
+                <Lede className="max-w-[58ch]">{service.problem}</Lede>
+            </Section>
 
-            <section className="mx-auto max-w-[1180px] border-t border-line px-3 py-8">
-                <h2 className="text-[clamp(1.75rem,3vw,2.4rem)] leading-[1.08] tracking-[-0.025em]">
-                    What the engagement is
-                </h2>
-                <ol className="mt-5 border-t border-line">
+            <Section className="border-t border-line">
+                <Heading>What the engagement is</Heading>
+                <ol className="mt-8 border-t border-line">
                     {service.work.map((step, index) => (
-                        <li key={step} className="flex gap-3 border-b border-line py-3">
+                        <li key={step} className="flex gap-4 border-b border-line py-4">
                             <span className="font-mono text-xs tabular-nums text-accent pt-1">
                                 {String(index + 1).padStart(2, "0")}
                             </span>
@@ -105,20 +102,16 @@ const ServicePage = async ({ params }: Params) => {
                         </li>
                     ))}
                 </ol>
-            </section>
+            </Section>
 
-            <section className="mx-auto max-w-[1180px] border-t border-line px-3 py-8">
-                <div className="grid gap-5 border border-line bg-surface p-5 md:grid-cols-2 md:gap-8">
+            <Section className="border-t border-line">
+                <div className="grid gap-6 border border-line bg-surface p-5 sm:p-8 md:grid-cols-2">
                     <div>
-                        <p className="font-mono text-xs uppercase tracking-[0.12em] text-dim">
-                            What you are left with
-                        </p>
+                        <Eyebrow>What you are left with</Eyebrow>
                         <p className="mt-2 max-w-[46ch]">{service.outcome}</p>
                     </div>
                     <div>
-                        <p className="font-mono text-xs uppercase tracking-[0.12em] text-dim">
-                            Typical engagement
-                        </p>
+                        <Eyebrow>Typical engagement</Eyebrow>
                         <p className="mt-2">{service.typical}</p>
                         <div className="mt-4">
                             <Button asChild>
@@ -127,7 +120,7 @@ const ServicePage = async ({ params }: Params) => {
                         </div>
                     </div>
                 </div>
-            </section>
+            </Section>
         </>
     )
 }

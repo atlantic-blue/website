@@ -24,28 +24,30 @@ const nav = [
 
 const RootLayout = ({ children }: { children: ReactNode }) => (
     <html lang="en">
-        <body>
+        <body className="overflow-x-hidden">
             <a
                 href="#main"
-                className="absolute -left-[9999px] top-2 focus:left-4 focus:z-10 focus:bg-accent-solid focus:text-on-accent focus:px-2 focus:py-1"
+                className="absolute -left-[9999px] top-2 focus:left-4 focus:z-10 focus:bg-accent-solid focus:px-3 focus:py-2 focus:text-on-accent"
             >
                 Skip to content
             </a>
 
             <header className="border-b border-line">
-                <div className="mx-auto flex max-w-[1180px] items-center justify-between gap-3 px-3 py-2">
+                <div className="mx-auto flex max-w-[1180px] items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
                     <Link
                         href="/"
-                        className="font-display text-[1.0625rem] font-bold tracking-[-0.02em] text-ink no-underline"
+                        className="font-display text-base font-bold tracking-[-0.02em] text-ink no-underline sm:text-[1.0625rem]"
                     >
                         Atlantic<span className="text-accent"> Blue</span>
                     </Link>
-                    <nav aria-label="Main" className="flex items-center gap-3 text-[0.9375rem]">
+                    <nav aria-label="Main" className="flex items-center gap-5 text-[0.9375rem]">
+                        {/* The text links go below the small breakpoint. Four items plus a
+                            button needs about 438px, and the narrowest phone is 320. */}
                         {nav.map((item) => (
                             <Link
                                 key={item.label}
                                 href={item.href}
-                                className="text-dim no-underline hover:text-ink"
+                                className="hidden text-dim no-underline hover:text-ink sm:inline"
                             >
                                 {item.label}
                             </Link>
@@ -59,19 +61,19 @@ const RootLayout = ({ children }: { children: ReactNode }) => (
 
             <main id="main">{children}</main>
 
-            <footer className="mt-12 border-t border-line bg-surface py-5">
-                <div className="mx-auto grid max-w-[1180px] gap-3 px-3 md:grid-cols-[1.4fr_1fr] md:gap-8">
+            <footer className="mt-16 border-t border-line bg-surface py-10 sm:mt-24">
+                <div className="mx-auto grid max-w-[1180px] gap-8 px-4 sm:px-6 md:grid-cols-[1.4fr_1fr] lg:px-8">
                     <div>
                         <p className="font-display text-[1.0625rem] font-bold tracking-[-0.02em]">
                             Atlantic Blue
                         </p>
-                        <p className="mt-2 text-[0.8125rem]">
+                        <p className="mt-3 text-sm">
                             <a href={`mailto:${company.email}`} className="text-accent">
                                 {company.email}
                             </a>
                         </p>
                     </div>
-                    <div className="text-[0.8125rem] leading-[1.7] text-dim">
+                    <div className="text-sm leading-relaxed text-dim">
                         <p>{company.legalName}</p>
                         <p>
                             Registered in England and Wales, company number{" "}
