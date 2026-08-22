@@ -89,8 +89,12 @@ resource "aws_lambda_function" "image" {
   }
 }
 
-# A public function URL needs both permissions to work: one for the URL, one for the
-# function behind it.
+# A public function URL needs both permissions to work: one for the URL, one for the function
+# behind it. Miss the second and every request returns 403.
+#
+# Only the InvokeFunctionUrl permission takes function_url_auth_type. Putting it on the
+# InvokeFunction permission fails the apply with
+# "FunctionUrlAuthType is only supported for lambda:InvokeFunctionUrl action".
 resource "aws_lambda_function_url" "server" {
   function_name      = aws_lambda_function.server.function_name
   authorization_type = "NONE"
@@ -110,11 +114,10 @@ resource "aws_lambda_permission" "server_url" {
 }
 
 resource "aws_lambda_permission" "server_invoke" {
-  statement_id           = "AllowInvokeViaFunctionUrl"
-  action                 = "lambda:InvokeFunction"
-  function_name          = aws_lambda_function.server.function_name
-  principal              = "*"
-  function_url_auth_type = "NONE"
+  statement_id  = "AllowInvokeViaFunctionUrl"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.server.function_name
+  principal     = "*"
 }
 
 resource "aws_lambda_permission" "image_url" {
@@ -126,9 +129,8 @@ resource "aws_lambda_permission" "image_url" {
 }
 
 resource "aws_lambda_permission" "image_invoke" {
-  statement_id           = "AllowInvokeViaFunctionUrl"
-  action                 = "lambda:InvokeFunction"
-  function_name          = aws_lambda_function.image.function_name
-  principal              = "*"
-  function_url_auth_type = "NONE"
+  statement_id  = "AllowInvokeViaFunctionUrl"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.image.function_name
+  principal     = "*"
 }
