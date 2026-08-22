@@ -1,5 +1,6 @@
 import { beforeAll, describe, expect, inject, it } from "vitest"
 
+import { services } from "../src/lib/services"
 import { company } from "../src/lib/site"
 
 const baseUrl = inject("baseUrl")
@@ -48,7 +49,7 @@ describe("the home page", () => {
 describe("an address that does not exist", () => {
     // The old site answered 200 with the home page for every one of these.
     // See docs/AUDIT-2026-08.md section 2.2.
-    const missing = ["/nonsense-xyz", "/blog", "/services", "/contact", "/about"]
+    const missing = ["/nonsense-xyz", "/blog", "/contact", "/about"]
 
     it.each(missing)("answers 404 for %s", async (path) => {
         const { status } = await get(path)
@@ -57,8 +58,8 @@ describe("an address that does not exist", () => {
 
     it("serves the not found page, not the home page", async () => {
         const { body } = await get("/nonsense-xyz")
-        expect(body).toContain("<h1>Page not found</h1>")
-        expect(body).not.toContain(`<h1>${company.tradingName}</h1>`)
+        expect(body).toMatch(/<h1[^>]*>Page not found<\/h1>/)
+        expect(body).not.toContain("cannot afford to break")
     })
 
     // A canonical link set on the layout is inherited by every page beneath it.
@@ -120,5 +121,57 @@ describe("the design system", () => {
     // See DESIGN.md, "Confidentiality".
     it("carries no client attributed metric", () => {
         expect(body).not.toMatch(/300\s?KB|1\s?MB|World Cup|TheoPlayer|XLink|interstitial/i)
+    })
+})
+
+describe("the service pages", () => {
+    const slugs = services.map((service) => service.slug)
+
+    it("has one page per service, and there is more than one", () => {
+        expect(slugs.length).toBeGreaterThan(5)
+        expect(new Set(slugs).size).toBe(slugs.length)
+    })
+
+    it.each(slugs)("answers 200 for /services/%s", async (slug) => {
+        const { status } = await get(`/services/${slug}`)
+        expect(status).toBe(200)
+    })
+
+    it("gives each page one h1 and a canonical pointing at itself", async () => {
+        for (const slug of slugs) {
+            const { body } = await get(`/services/${slug}`)
+            expect(countOf(body, /<h1[\s>]/g), `${slug} h1 count`).toBe(1)
+            expect(body, `${slug} canonical`).toContain(
+                `rel="canonical" href="${company.origin}/services/${slug}"`,
+            )
+        }
+    })
+
+    it("carries Service structured data a search engine can read", async () => {
+        const { body } = await get(`/services/${slugs[0]}`)
+        const block = body.match(/application\/ld\+json[^>]*>([\s\S]*?)<\/script>/)?.[1]
+        expect(block).toBeDefined()
+
+        const parsed = JSON.parse(block!.replace(/&quot;/g, '"'))
+        const types = parsed["@graph"].map((node: { "@type": string }) => node["@type"])
+        expect(types).toContain("Service")
+        expect(types).toContain("BreadcrumbList")
+    })
+
+    it("lists every service on the index", async () => {
+        const { body } = await get("/services")
+        for (const service of services) {
+            expect(body, `${service.name} missing from the index`).toContain(service.name)
+        }
+    })
+
+    // Naming a client is agreed. Anything specific about their systems is not.
+    it("carries no client attributed metric on any page", async () => {
+        for (const slug of ["", "services", ...slugs.map((s) => `services/${s}`)]) {
+            const { body } = await get(`/${slug}`)
+            expect(body, `leak on /${slug}`).not.toMatch(
+                /300\s?KB|1\s?MB|World Cup|TheoPlayer|XLink|interstitial/i,
+            )
+        }
     })
 })

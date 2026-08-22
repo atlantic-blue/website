@@ -85,6 +85,15 @@ An 8 point grid. Steps: 4, 8, 16, 24, 40, 64, 96. Nothing between them.
 
 Layout uses flex or grid with `gap`, never per element margins that collapse or double.
 
+## Implementation
+
+Tailwind CSS v4 with the tokens above declared in `@theme`, so a utility class reaches them and
+there is one place to change a value. Components that need to be correct rather than merely styled
+use Radix primitives in the shadcn pattern, kept in `src/components/ui` where we own the source.
+
+Stripe has no design system to adopt: its dashboard system is internal, and its typeface is licensed
+from Klim. Its look is art direction rather than a library, and no library reproduces it.
+
 ## Shape and depth
 
 Square corners. Zero radius everywhere except a status dot, which is a circle because it is a lamp.
