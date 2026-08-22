@@ -51,8 +51,10 @@
     --font-body: "Hanken Grotesk", ui-sans-serif, -apple-system, sans-serif;
     --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
 
-    /* An 8 point grid. Nothing between these steps. */
-    --spacing: 8px;
+    /* Tailwind counts in 4px. Do not redefine it: overriding --spacing doubles
+       every utility on every element at once, which blows the layout out on a
+       narrow screen. Stay on the 8 point grid by using even steps instead, so
+       px-4 is 16px and py-6 is 24px. */
 
     /* Square corners. A rounded corner reads consumer grade and this is not a
        consumer product. */
