@@ -11,7 +11,15 @@ locals {
   orp_all_viewer_except_host_id = "b689b0a8-53d0-40ab-baf2-68738e2966ac" # AllViewerExceptHostHeader
 
   # Paths served straight from the bucket rather than from the server function.
-  s3_patterns = ["BUILD_ID", "_next/static/*", "favicon.ico", "robots.txt", "sitemap.xml"]
+  #
+  # Everything under the app's public/ directory lands at the root of the OpenNext assets
+  # output, so each such directory needs a pattern here or CloudFront sends the request to
+  # the server function, which has no route for it and answers 404.
+  #
+  # robots.txt and sitemap.xml are deliberately absent: they are served by the application
+  # (issue #9), not from the bucket. Routing them here returns 403, because Origin Access
+  # Control refuses a key that does not exist, and a 403 on robots.txt is worse than a 404.
+  s3_patterns = ["BUILD_ID", "_next/static/*", "fonts/*", "favicon.ico"]
 }
 
 resource "aws_cloudfront_origin_access_control" "s3" {
