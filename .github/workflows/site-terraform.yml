@@ -1,0 +1,43 @@
+name: Site (Terraform check)
+
+# A pull request touching the site stack checks its formatting and validates it. It cannot plan:
+# a plan reads the real state and needs the build output on disk, and both belong to the deploy
+# workflow. This catches a broken configuration on the pull request rather than at deploy time.
+on:
+  pull_request:
+    paths:
+      - "infra/site/**"
+      - ".github/workflows/site-terraform.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Format and validate
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: infra/site
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.10.5"
+
+      - run: terraform fmt -check -recursive
+      - run: terraform init -backend=false -no-color
+
+      # validate reads filemd5 on the build output, so it needs a bundle on disk. A stub with
+      # the paths the configuration reads is enough to prove the configuration itself is sound.
+      - name: Stub the build output
+        run: |
+          set -euo pipefail
+          root="$GITHUB_WORKSPACE/packages/web/.open-next"
+          mkdir -p "$root/assets" "$root/cache" "$root/server-functions/default" "$root/image-optimization-function"
+          echo "validation-stub" > "$root/assets/BUILD_ID"
+          echo "// stub" > "$root/server-functions/default/index.mjs"
+          echo "// stub" > "$root/image-optimization-function/index.mjs"
+
+      - run: terraform validate -no-color
