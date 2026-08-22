@@ -14,10 +14,16 @@ export const metadata: Metadata = {
  * 404 and mean it.
  */
 const NotFound = () => (
-    <section className="shell narrow">
-        <h1>Page not found</h1>
-        <p>
-            That address does not exist. <Link href="/">Go to the home page</Link>.
+    <section className="mx-auto max-w-[1180px] px-3 py-12">
+        <h1 className="text-[clamp(2.4rem,5.2vw,4.2rem)] leading-[1.02] tracking-[-0.035em]">
+            Page not found
+        </h1>
+        <p className="mt-3 text-dim">
+            That address does not exist.{" "}
+            <Link href="/" className="text-accent">
+                Go to the home page
+            </Link>
+            .
         </p>
     </section>
 )
