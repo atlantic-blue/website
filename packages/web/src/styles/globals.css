@@ -1,0 +1,310 @@
+@import "./tokens.css";
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+* {
+    margin: 0;
+}
+
+html {
+    color-scheme: dark light;
+}
+
+body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: 1rem;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+}
+
+img,
+svg,
+video {
+    display: block;
+    max-width: 100%;
+}
+
+a {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Square corners everywhere. A rounded corner reads consumer grade and this is
+   not a consumer product. The one exception is a status lamp. */
+:where(a, button, input, textarea, select):focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+h1,
+h2,
+h3 {
+    font-family: var(--display);
+    font-weight: 700;
+    text-wrap: balance;
+}
+
+h1 {
+    font-size: clamp(2.4rem, 5.2vw, 4.2rem);
+    line-height: 1.02;
+    letter-spacing: -0.035em;
+}
+
+h2 {
+    font-size: clamp(1.75rem, 3vw, 2.4rem);
+    line-height: 1.08;
+    letter-spacing: -0.025em;
+}
+
+h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+}
+
+p {
+    max-width: var(--measure);
+}
+
+.label {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--dim);
+}
+
+.tnum {
+    font-variant-numeric: tabular-nums;
+}
+
+.skip {
+    position: absolute;
+    left: -9999px;
+    top: var(--s2);
+}
+
+.skip:focus {
+    left: var(--s3);
+    z-index: 10;
+    background: var(--accent-solid);
+    color: var(--on-accent-solid);
+    padding: var(--s2) var(--s3);
+}
+
+.shell {
+    max-width: var(--page);
+    margin-inline: auto;
+    padding-inline: var(--s4);
+}
+
+/* Header */
+.masthead {
+    border-bottom: 1px solid var(--line);
+}
+
+.masthead .shell {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s4);
+    padding-block: var(--s3);
+}
+
+.wordmark {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 1.0625rem;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+}
+
+.wordmark span {
+    color: var(--accent);
+}
+
+.masthead nav {
+    display: flex;
+    align-items: center;
+    gap: var(--s4);
+    font-size: 0.9375rem;
+}
+
+.masthead nav a {
+    color: var(--dim);
+}
+
+.masthead nav a:hover {
+    color: var(--ink);
+}
+
+.btn {
+    display: inline-block;
+    background: var(--accent-solid);
+    color: var(--on-accent-solid);
+    font-family: var(--body);
+    font-weight: 500;
+    font-size: 0.9375rem;
+    padding: 11px var(--s4);
+    min-height: 44px;
+    line-height: 22px;
+    border: 1px solid var(--accent-solid);
+    transition: opacity 150ms ease;
+}
+
+.btn:hover {
+    text-decoration: none;
+    opacity: 0.88;
+}
+
+.btn-quiet {
+    background: transparent;
+    color: var(--ink);
+    border-color: var(--line);
+}
+
+.btn-quiet:hover {
+    border-color: var(--accent);
+    opacity: 1;
+}
+
+/* Hero */
+.hero {
+    padding-block: var(--s7) var(--s6);
+}
+
+.hero .label {
+    margin-bottom: var(--s4);
+}
+
+.hero p.lede {
+    margin-top: var(--s4);
+    font-size: 1.125rem;
+    color: var(--dim);
+}
+
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s3);
+    margin-top: var(--s5);
+}
+
+/* Practice grid */
+.practice {
+    border-top: 1px solid var(--line);
+    padding-block: var(--s6);
+}
+
+.practice-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--s5);
+    margin-top: var(--s5);
+}
+
+@media (min-width: 760px) {
+    .practice-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.practice-grid h3 {
+    margin-bottom: var(--s2);
+}
+
+.practice-grid p {
+    color: var(--dim);
+    font-size: 0.9375rem;
+}
+
+.flagship {
+    border: 1px solid var(--line);
+    background: var(--surface);
+    padding: var(--s5);
+    margin-top: var(--s5);
+    display: grid;
+    gap: var(--s4);
+}
+
+@media (min-width: 760px) {
+    .flagship {
+        grid-template-columns: 1fr 1fr;
+        gap: var(--s6);
+        align-items: start;
+    }
+}
+
+.flagship p {
+    color: var(--dim);
+}
+
+/* Clients */
+.clients {
+    border-top: 1px solid var(--line);
+    padding-block: var(--s5);
+}
+
+.clients ul {
+    list-style: none;
+    padding: 0;
+    margin-top: var(--s4);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s3) var(--s5);
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 1.125rem;
+    color: var(--dim);
+}
+
+/* Footer */
+.foot {
+    border-top: 1px solid var(--line);
+    background: var(--surface);
+    margin-top: var(--s7);
+    padding-block: var(--s5);
+}
+
+.foot-grid {
+    display: grid;
+    gap: var(--s4);
+}
+
+@media (min-width: 760px) {
+    .foot-grid {
+        grid-template-columns: 1.4fr 1fr;
+        gap: var(--s6);
+    }
+}
+
+.foot .legal {
+    color: var(--dim);
+    font-size: 0.8125rem;
+    line-height: 1.7;
+    max-width: none;
+}
+
+.foot address {
+    font-style: normal;
+}
+
+/* Not found */
+.narrow {
+    padding-block: var(--s7);
+}
+
+.narrow p {
+    margin-top: var(--s3);
+    color: var(--dim);
+}
