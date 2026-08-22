@@ -111,4 +111,13 @@ jobs:
           echo "unknown address returned $missing"
           test "$missing" = "404"
           curl -sSI "$url/" | grep -i "strict-transport-security"
-          echo "deployed site answers, returns 404 for an unknown address, and sends security headers"
+
+          # The fault that made the old site slow was a distribution that cached nothing:
+          # every time to live was zero, so every request woke the function. A second
+          # request has to be a cache hit, or we have rebuilt the same problem.
+          curl -sS -o /dev/null "$url/"
+          hit=$(curl -sS -o /dev/null -D - "$url/" | tr -d '\r' | grep -i '^x-cache:' || true)
+          echo "second request: $hit"
+          echo "$hit" | grep -qi "Hit from cloudfront"
+
+          echo "deployed site answers, returns 404, sends security headers, and caches at the edge"
