@@ -14,12 +14,12 @@ export const metadata: Metadata = {
  * 404 and mean it.
  */
 const NotFound = () => (
-    <>
+    <section className="shell narrow">
         <h1>Page not found</h1>
         <p>
             That address does not exist. <Link href="/">Go to the home page</Link>.
         </p>
-    </>
+    </section>
 )
 
 export default NotFound

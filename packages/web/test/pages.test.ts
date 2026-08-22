@@ -81,3 +81,27 @@ describe("the server", () => {
         expect(response.headers.get("x-powered-by")).toBeNull()
     })
 })
+
+describe("the design system", () => {
+    let body: string
+
+    beforeAll(async () => {
+        ;({ body } = await get("/"))
+    })
+
+    it("self hosts its faces, so nothing loads from another origin", () => {
+        expect(body).not.toMatch(/fonts\.googleapis\.com|fonts\.gstatic\.com|cdn\./)
+    })
+
+    it("names the clients we are allowed to name", () => {
+        for (const name of ["ITV", "Sky", "DAZN", "castLabs"]) {
+            expect(body).toContain(name)
+        }
+    })
+
+    // Naming a client is agreed. Anything specific about their systems is not.
+    // See DESIGN.md, "Confidentiality".
+    it("carries no client attributed metric", () => {
+        expect(body).not.toMatch(/300\s?KB|1\s?MB|World Cup|TheoPlayer|XLink|interstitial/i)
+    })
+})
