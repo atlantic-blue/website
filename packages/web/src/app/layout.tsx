@@ -3,6 +3,7 @@ import Link from "next/link"
 import type { ReactNode } from "react"
 
 import { Button } from "@/components/ui/button"
+import { footerNav } from "@/lib/nav"
 import { company } from "@/lib/site"
 
 import "@/styles/globals.css"
@@ -16,11 +17,6 @@ export const metadata: Metadata = {
     description:
         "A London software consultancy. We build and repair systems that cannot afford to break, with nine years inside broadcast and streaming platforms behind it.",
 }
-
-const nav = [
-    { href: "/services", label: "Services" },
-    { href: "/services", label: "Work" },
-]
 
 const RootLayout = ({ children }: { children: ReactNode }) => (
     <html lang="en">
@@ -41,17 +37,12 @@ const RootLayout = ({ children }: { children: ReactNode }) => (
                         Atlantic<span className="text-accent"> Blue</span>
                     </Link>
                     <nav aria-label="Main" className="flex items-center gap-5 text-[0.9375rem]">
-                        {/* The text links go below the small breakpoint. Four items plus a
-                            button needs about 438px, and the narrowest phone is 320. */}
-                        {nav.map((item) => (
-                            <Link
-                                key={item.label}
-                                href={item.href}
-                                className="hidden text-dim no-underline hover:text-ink sm:inline"
-                            >
-                                {item.label}
-                            </Link>
-                        ))}
+                        {/* One link, visible at every width. Two hidden links left a
+                            phone with no navigation at all, and the second of them
+                            pointed at the services page while calling itself Work. */}
+                        <Link href="/services" className="text-dim no-underline hover:text-ink">
+                            Services
+                        </Link>
                         <Button asChild>
                             <a href={`mailto:${company.email}`}>Book a call</a>
                         </Button>
@@ -61,19 +52,46 @@ const RootLayout = ({ children }: { children: ReactNode }) => (
 
             <main id="main">{children}</main>
 
-            <footer className="mt-16 border-t border-line bg-surface py-10 sm:mt-24">
-                <div className="mx-auto grid max-w-[1180px] gap-8 px-4 sm:px-6 md:grid-cols-[1.4fr_1fr] lg:px-8">
-                    <div>
-                        <p className="font-display text-[1.0625rem] font-bold tracking-[-0.02em]">
-                            Atlantic Blue
-                        </p>
-                        <p className="mt-3 text-sm">
-                            <a href={`mailto:${company.email}`} className="text-accent">
-                                {company.email}
-                            </a>
-                        </p>
+            <footer className="mt-16 border-t border-line bg-surface sm:mt-24">
+                <div className="mx-auto max-w-[1180px] px-4 py-10 sm:px-6 lg:px-8">
+                    <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+                        <div>
+                            <p className="font-display text-[1.0625rem] font-bold tracking-[-0.02em]">
+                                Atlantic Blue
+                            </p>
+                            <p className="mt-3 max-w-[28ch] text-sm text-dim">
+                                A London software consultancy. We build software that cannot afford
+                                to break.
+                            </p>
+                            <p className="mt-4 text-sm">
+                                <a href={`mailto:${company.email}`} className="text-accent">
+                                    {company.email}
+                                </a>
+                            </p>
+                        </div>
+
+                        {footerNav.map((column) => (
+                            <nav key={column.heading} aria-label={column.heading}>
+                                <p className="font-mono text-xs uppercase tracking-[0.12em] text-dim">
+                                    {column.heading}
+                                </p>
+                                <ul className="mt-4 flex flex-col gap-2 text-sm">
+                                    {column.links.map((link) => (
+                                        <li key={link.href}>
+                                            <Link
+                                                href={link.href}
+                                                className="text-ink no-underline hover:text-accent hover:underline"
+                                            >
+                                                {link.label}
+                                            </Link>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </nav>
+                        ))}
                     </div>
-                    <div className="text-sm leading-relaxed text-dim">
+
+                    <div className="mt-10 border-t border-line pt-6 text-sm leading-relaxed text-dim">
                         <p>{company.legalName}</p>
                         <p>
                             Registered in England and Wales, company number{" "}
