@@ -1,6 +1,7 @@
 import { beforeAll, describe, expect, inject, it } from "vitest"
 
 import { services } from "../src/lib/services"
+import { engagements } from "../src/lib/work"
 import { company } from "../src/lib/site"
 
 const baseUrl = inject("baseUrl")
@@ -238,9 +239,74 @@ describe("finding the pages", () => {
         }
     })
 
-    it("does not offer a link that goes somewhere other than it says", async () => {
+    it("only offers a header link once the page behind it exists", async () => {
         const { body } = await get("/")
         const header = body.match(/<header[\s\S]*?<\/header>/)?.[0] ?? ""
-        expect(header).not.toContain(">Work<")
+        for (const [label, href] of [
+            ["Services", "/services"],
+            ["Work", "/work"],
+        ] as const) {
+            expect(header, `${label} missing`).toContain(`>${label}<`)
+            expect((await get(href)).status, `${href} does not exist`).toBe(200)
+        }
+    })
+})
+
+describe("the work pages", () => {
+    const slugs = engagements.map((engagement) => engagement.slug)
+
+    it.each(slugs)("answers 200 for /work/%s", async (slug) => {
+        const { status } = await get(`/work/${slug}`)
+        expect(status).toBe(200)
+    })
+
+    it("gives each page one h1 and a canonical pointing at itself", async () => {
+        for (const slug of slugs) {
+            const { body } = await get(`/work/${slug}`)
+            expect(countOf(body, /<h1[\s>]/g), `${slug} h1 count`).toBe(1)
+            expect(body, `${slug} canonical`).toContain(
+                `rel="canonical" href="${company.origin}/work/${slug}"`,
+            )
+        }
+    })
+
+    it("names the client and links to the services the work touches", async () => {
+        for (const engagement of engagements) {
+            const { body } = await get(`/work/${engagement.slug}`)
+            expect(body, `${engagement.slug} client`).toContain(engagement.client)
+            for (const service of engagement.services) {
+                expect(body, `${engagement.slug} -> ${service}`).toContain(`/services/${service}`)
+            }
+        }
+    })
+
+    it("carries Article structured data", async () => {
+        const { body } = await get(`/work/${slugs[0]}`)
+        const block = body.match(/application\/ld\+json[^>]*>([\s\S]*?)<\/script>/)?.[1]
+        const parsed = JSON.parse(block!.replace(/&quot;/g, '"'))
+        const types = parsed["@graph"].map((node: { "@type": string }) => node["@type"])
+        expect(types).toContain("Article")
+        expect(types).toContain("BreadcrumbList")
+    })
+
+    // The whole point of these pages is that they name a client without publishing
+    // anything that belongs to the client. See DESIGN.md, "Confidentiality".
+    it("names a client on every page and a client metric on none", async () => {
+        for (const slug of slugs) {
+            const { body } = await get(`/work/${slug}`)
+            expect(body, `leak on /work/${slug}`).not.toMatch(
+                /300\s?KB|1\s?MB|World Cup|TheoPlayer|XLink|interstitial|Shaka|exoPlayer|hasplayer/i,
+            )
+        }
+    })
+
+    it("reaches every engagement from the footer", async () => {
+        const { body } = await get("/")
+        const footer = body.match(/<footer[\s\S]*?<\/footer>/)?.[0] ?? ""
+        for (const engagement of engagements) {
+            expect(footer, `${engagement.slug} missing from the footer`).toContain(
+                `/work/${engagement.slug}`,
+            )
+        }
     })
 })
