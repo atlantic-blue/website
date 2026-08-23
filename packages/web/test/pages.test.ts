@@ -59,7 +59,8 @@ describe("an address that does not exist", () => {
     it("serves the not found page, not the home page", async () => {
         const { body } = await get("/nonsense-xyz")
         expect(body).toMatch(/<h1[^>]*>Page not found<\/h1>/)
-        expect(body).not.toContain("cannot afford to break")
+        // The footer now carries the tagline on every page, so check the heading.
+        expect(body).not.toMatch(/<h1[^>]*>We build software/)
     })
 
     // A canonical link set on the layout is inherited by every page beneath it.
@@ -179,11 +180,13 @@ describe("the service pages", () => {
 describe("mobile layout", () => {
     // The header needed about 438px before this: a wordmark, two text links and
     // a button, all unconditional. The narrowest phone in common use is 320.
-    it("hides the text navigation below the small breakpoint", async () => {
+    // Two links were hidden below 640px and nothing replaced them, so a phone had
+    // no navigation at all. Whatever is in the header has to be reachable.
+    it("keeps the navigation visible at every width", async () => {
         const { body } = await get("/")
         const header = body.match(/<header[\s\S]*?<\/header>/)?.[0] ?? ""
         expect(header).toContain(">Services<")
-        expect(header).toMatch(/class="[^"]*hidden[^"]*sm:inline[^"]*"[^>]*>Services</)
+        expect(header).not.toMatch(/class="[^"]*\bhidden\b[^"]*"[^>]*>Services</)
     })
 
     it("keeps the call to action visible at every width", async () => {
@@ -208,30 +211,36 @@ describe("mobile layout", () => {
     })
 })
 
-describe("imagery", () => {
-    it("serves the image through the optimiser, in a modern format", async () => {
+describe("finding the pages", () => {
+    // A heading that is a link has to look like one. Every service title was set
+    // in the body colour with no underline, so the eight pages behind them were
+    // invisible even though the links were there.
+    it("marks a service link as a link", async () => {
         const { body } = await get("/")
-        const src = body.match(/src="(\/_next\/image[^"]*)"/)?.[1]?.replace(/&amp;/g, "&")
-        expect(src, "no optimised image on the page").toBeDefined()
-
-        const response = await fetch(`${baseUrl}${src}`, {
-            headers: { accept: "image/avif,image/webp,image/*" },
-        })
-        expect(response.status).toBe(200)
-        expect(response.headers.get("content-type")).toMatch(/avif|webp/)
+        const anchors = [...body.matchAll(/<a[^>]*href="\/services\/[^"]+"[^>]*>/g)].map(
+            (m) => m[0],
+        )
+        expect(anchors.length).toBeGreaterThan(5)
+        for (const anchor of anchors) {
+            expect(anchor, `no visual affordance: ${anchor}`).toMatch(/underline|text-accent/)
+        }
     })
 
-    it("gives the image dimensions, so nothing shifts as it loads", async () => {
-        const { body } = await get("/")
-        const tag = body.match(/<img[^>]*_next\/image[^>]*>/)?.[0] ?? ""
-        expect(tag).toMatch(/width="\d+"/)
-        expect(tag).toMatch(/height="\d+"/)
+    it("reaches every service page from the footer of every page", async () => {
+        for (const path of ["/", "/services", `/services/${services[0]!.slug}`]) {
+            const { body } = await get(path)
+            const footer = body.match(/<footer[\s\S]*?<\/footer>/)?.[0] ?? ""
+            for (const service of services) {
+                expect(footer, `${service.slug} missing from the footer on ${path}`).toContain(
+                    `/services/${service.slug}`,
+                )
+            }
+        }
     })
 
-    it("describes the image for somebody who cannot see it", async () => {
+    it("does not offer a link that goes somewhere other than it says", async () => {
         const { body } = await get("/")
-        const tag = body.match(/<img[^>]*_next\/image[^>]*>/)?.[0] ?? ""
-        const alt = tag.match(/alt="([^"]*)"/)?.[1] ?? ""
-        expect(alt.length).toBeGreaterThan(20)
+        const header = body.match(/<header[\s\S]*?<\/header>/)?.[0] ?? ""
+        expect(header).not.toContain(">Work<")
     })
 })

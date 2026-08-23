@@ -1,11 +1,9 @@
 import type { Metadata } from "next"
-import Image from "next/image"
 import Link from "next/link"
 
 import { Button } from "@/components/ui/button"
 import { Eyebrow, Heading, Lede, Section, Title } from "@/components/ui/section"
 import { servicesInGroup } from "@/lib/services"
-import whiteboard from "@/images/whiteboard.jpg"
 import { clients, company } from "@/lib/site"
 
 export const metadata: Metadata = {
@@ -17,7 +15,10 @@ const ServiceList = ({ group }: { group: "specialism" | "practice" }) => (
         {servicesInGroup(group).map((service) => (
             <li key={service.slug}>
                 <h3 className="text-lg font-semibold tracking-[-0.01em] sm:text-xl">
-                    <Link href={`/services/${service.slug}`} className="text-ink">
+                    <Link
+                        href={`/services/${service.slug}`}
+                        className="text-accent underline decoration-line underline-offset-4 hover:decoration-accent"
+                    >
                         {service.name}
                     </Link>
                 </h3>
@@ -49,23 +50,11 @@ const HomePage = () => (
         <Section className="border-t border-line">
             <Eyebrow>The specialism</Eyebrow>
             <Heading className="mt-3">Broadcast and streaming</Heading>
-            <div className="mt-6 grid items-start gap-8 md:grid-cols-[1.1fr_0.9fr]">
-                <p className="max-w-[60ch] text-dim">
-                    Where we contract most, and the reason the reliability work below is not a
-                    claim. A fault on a streaming platform is visible to millions of people at once,
-                    so it gets found and fixed to a standard most systems never need.
-                </p>
-                {/* Deliberately out of focus. It is a real whiteboard from a real
-                    engagement, and the client's architecture is theirs, not ours to
-                    publish. See DESIGN.md, "Confidentiality". */}
-                <Image
-                    src={whiteboard}
-                    alt="A whiteboard covered in a hand drawn system architecture, deliberately out of focus"
-                    className="w-full border border-line"
-                    sizes="(min-width: 768px) 40vw, 100vw"
-                    placeholder="blur"
-                />
-            </div>
+            <p className="mt-4 max-w-[60ch] text-dim">
+                Where we contract most, and the reason the reliability work below is not a claim. A
+                fault on a streaming platform is visible to millions of people at once, so it gets
+                found and fixed to a standard most systems never need.
+            </p>
             <ServiceList group="specialism" />
         </Section>
 

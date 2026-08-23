@@ -43,7 +43,10 @@ const ServicesPage = () => (
                     {servicesInGroup(group.key).map((service) => (
                         <li key={service.slug} className="border border-line bg-surface p-5 sm:p-6">
                             <h2 className="text-lg font-semibold tracking-[-0.01em] sm:text-xl">
-                                <Link href={`/services/${service.slug}`} className="text-ink">
+                                <Link
+                                    href={`/services/${service.slug}`}
+                                    className="text-accent underline decoration-line underline-offset-4 hover:decoration-accent"
+                                >
                                     {service.name}
                                 </Link>
                             </h2>
