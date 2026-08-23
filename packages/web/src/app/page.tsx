@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Eyebrow, Heading, Lede, Section, Title } from "@/components/ui/section"
 import { servicesInGroup } from "@/lib/services"
 import { clients, company } from "@/lib/site"
+import { engagements } from "@/lib/work"
 
 export const metadata: Metadata = {
     alternates: { canonical: "/" },
@@ -62,6 +63,37 @@ const HomePage = () => (
             <Eyebrow>The practice</Eyebrow>
             <Heading className="mt-3">What we build once we are in the building</Heading>
             <ServiceList group="practice" />
+        </Section>
+
+        <Section className="border-t border-line">
+            <Eyebrow>Work</Eyebrow>
+            <Heading className="mt-3">Where the work has been</Heading>
+            <ul className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {engagements.slice(0, 3).map((engagement) => (
+                    <li key={engagement.slug}>
+                        <p className="font-mono text-xs uppercase tracking-[0.12em] text-dim">
+                            {engagement.client}
+                        </p>
+                        <h3 className="mt-2 text-lg font-semibold tracking-[-0.01em] sm:text-xl">
+                            <Link
+                                href={`/work/${engagement.slug}`}
+                                className="text-accent underline decoration-line underline-offset-4 hover:decoration-accent"
+                            >
+                                {engagement.title}
+                            </Link>
+                        </h3>
+                        <p className="mt-2 text-[0.9375rem] text-dim">{engagement.summary}</p>
+                    </li>
+                ))}
+            </ul>
+            <p className="mt-8">
+                <Link
+                    href="/work"
+                    className="text-accent underline decoration-line underline-offset-4 hover:decoration-accent"
+                >
+                    All six engagements
+                </Link>
+            </p>
         </Section>
 
         <Section className="border-t border-line py-8 sm:py-10">

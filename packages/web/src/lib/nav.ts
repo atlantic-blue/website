@@ -1,4 +1,5 @@
 import { services } from "./services"
+import { engagements } from "./work"
 
 /**
  * The whole site in one place, used by the footer so every page is reachable
@@ -19,7 +20,10 @@ export const footerNav = [
             .map((service) => ({ href: `/services/${service.slug}`, label: service.name })),
     },
     {
-        heading: "Company",
-        links: [{ href: "/services", label: "All services" }],
+        heading: "Work",
+        links: engagements.map((engagement) => ({
+            href: `/work/${engagement.slug}`,
+            label: engagement.client,
+        })),
     },
 ] as const

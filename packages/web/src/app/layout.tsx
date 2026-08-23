@@ -43,6 +43,9 @@ const RootLayout = ({ children }: { children: ReactNode }) => (
                         <Link href="/services" className="text-dim no-underline hover:text-ink">
                             Services
                         </Link>
+                        <Link href="/work" className="text-dim no-underline hover:text-ink">
+                            Work
+                        </Link>
                         <Button asChild>
                             <a href={`mailto:${company.email}`}>Book a call</a>
                         </Button>
