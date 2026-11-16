@@ -36,8 +36,7 @@ data "aws_iam_policy_document" "lambda" {
     resources = ["arn:aws:logs:*:*:*"]
   }
 
-  # The server function reads and writes the incremental cache; the image function reads
-  # the source images. Both are scoped to this stack's bucket.
+  # The image function reads the source images from this stack's bucket.
   statement {
     effect    = "Allow"
     actions   = ["s3:GetObject", "s3:PutObject", "s3:ListBucket", "s3:DeleteObject"]
