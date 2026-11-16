@@ -10,6 +10,8 @@ data "archive_file" "image" {
   output_path = "${path.module}/.build/image.zip"
 }
 
+data "aws_caller_identity" "current" {}
+
 data "aws_iam_policy_document" "lambda_assume" {
   statement {
     effect  = "Allow"
@@ -34,8 +36,7 @@ data "aws_iam_policy_document" "lambda" {
     resources = ["arn:aws:logs:*:*:*"]
   }
 
-  # The server function reads and writes the incremental cache; the image function reads
-  # the source images. Both are scoped to this stack's bucket.
+  # The image function reads the source images from this stack's bucket.
   statement {
     effect    = "Allow"
     actions   = ["s3:GetObject", "s3:PutObject", "s3:ListBucket", "s3:DeleteObject"]
@@ -48,9 +49,49 @@ resource "aws_iam_role_policy" "lambda" {
   policy = data.aws_iam_policy_document.lambda.json
 }
 
+# The image function answers a public function url, so the enquiry tables and the mail
+# identity stay out of its reach: the server function runs as a role of its own.
+resource "aws_iam_role" "server" {
+  name               = "${local.prefix}-server"
+  assume_role_policy = data.aws_iam_policy_document.lambda_assume.json
+  tags               = local.tags
+}
+
+data "aws_iam_policy_document" "server" {
+  statement {
+    effect    = "Allow"
+    actions   = ["logs:CreateLogGroup", "logs:CreateLogStream", "logs:PutLogEvents"]
+    resources = ["arn:aws:logs:*:*:*"]
+  }
+
+  # The server function reads and writes the incremental cache in this stack's bucket.
+  statement {
+    effect    = "Allow"
+    actions   = ["s3:GetObject", "s3:PutObject", "s3:ListBucket", "s3:DeleteObject"]
+    resources = [aws_s3_bucket.assets.arn, "${aws_s3_bucket.assets.arn}/*"]
+  }
+
+  statement {
+    effect    = "Allow"
+    actions   = ["dynamodb:PutItem", "dynamodb:UpdateItem"]
+    resources = [aws_dynamodb_table.enquiries.arn, aws_dynamodb_table.rate_limits.arn]
+  }
+
+  statement {
+    effect    = "Allow"
+    actions   = ["ses:SendEmail"]
+    resources = ["arn:aws:ses:us-east-1:${data.aws_caller_identity.current.account_id}:identity/${var.root_domain}"]
+  }
+}
+
+resource "aws_iam_role_policy" "server" {
+  role   = aws_iam_role.server.id
+  policy = data.aws_iam_policy_document.server.json
+}
+
 resource "aws_lambda_function" "server" {
   function_name    = "${local.prefix}-server"
-  role             = aws_iam_role.lambda.arn
+  role             = aws_iam_role.server.arn
   filename         = data.archive_file.server.output_path
   source_code_hash = data.archive_file.server.output_base64sha256
   handler          = "index.handler"
@@ -66,6 +107,9 @@ resource "aws_lambda_function" "server" {
       CACHE_BUCKET_REGION     = "us-east-1"
       BUCKET_KEY_PREFIX       = "_assets"
       NEXT_PUBLIC_SITE_ORIGIN = "https://${local.primary_domain}"
+      ENQUIRIES_TABLE         = aws_dynamodb_table.enquiries.name
+      RATE_LIMITS_TABLE       = aws_dynamodb_table.rate_limits.name
+      CONTACT_MAIL_ADDRESS    = "hello@atlanticblue.solutions"
     }
   }
 }
