@@ -43,15 +43,10 @@ const blockOf = (source: string, header: string): string => {
 }
 
 const blocksOf = (source: string, keyword: string): string[] => {
-    const found: string[] = []
-    const header = `${keyword} {`
-    let at = source.indexOf(header)
-    while (at !== -1) {
-        const end = closingBrace(source, at)
-        found.push(source.slice(at, end + 1))
-        at = source.indexOf(header, end)
-    }
-    return found
+    const header = new RegExp(`^[ \\t]*${keyword}\\b[^\\n]*\\{`, "gm")
+    return [...source.matchAll(header)].map((match) =>
+        source.slice(match.index, closingBrace(source, match.index) + 1),
+    )
 }
 
 const settingsOf = (block: string): string[] => {
