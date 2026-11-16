@@ -381,17 +381,23 @@ describe("an enquiry is stored and mailed", () => {
         expect(rateLimitKeys()[0]).not.toContain(viewer)
     })
 
-    it("counts the address cloudfront saw, with its port removed", async () => {
-        await post(enquiry, { "cloudfront-viewer-address": `${viewer}:50354` })
-        await post(enquiry, { "x-forwarded-for": `198.51.100.4, ${viewer}` })
+    it("counts one viewer once, whatever the client writes in cloudfront-viewer-address", async () => {
+        // The origin request policy forwards every viewer header and asks for no
+        // header of its own, so a client writes this one as freely as any other.
+        for (let sent = 0; sent < 5; sent += 1) {
+            const answer = await post(enquiry, {
+                "x-forwarded-for": viewer,
+                "cloudfront-viewer-address": `192.0.2.${sent}:50354`,
+            })
+            expect(answer.status).toBe(201)
+        }
 
-        expect(new Set(rateLimitKeys()).size).toBe(1)
-    })
+        const answer = await post(enquiry, {
+            "x-forwarded-for": viewer,
+            "cloudfront-viewer-address": "192.0.2.9:50354",
+        })
 
-    it("removes the port from an address of the sixth version", async () => {
-        await post(enquiry, { "cloudfront-viewer-address": "2001:db8::1:51524" })
-        await post(enquiry, { "x-forwarded-for": "2001:db8::1" })
-
+        expect(answer.status).toBe(429)
         expect(new Set(rateLimitKeys()).size).toBe(1)
     })
 
