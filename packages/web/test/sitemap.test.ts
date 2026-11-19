@@ -53,12 +53,13 @@ const expectedPaths = [
     "/hushlog",
     "/hushlog/privacy",
     "/hushlog/support",
+    "/privacy",
 ]
 
 // Each of these is built by another step. A page that exists must be in the
 // sitemap, and an address in the sitemap must answer 200. The two checks
 // together hold whichever way round the steps merge.
-const pagesFromOtherSteps = ["/contact", "/privacy", "/cookies"]
+const pagesFromOtherSteps = ["/contact", "/cookies"]
 
 const statusOf = async (path: string): Promise<number> => (await fetch(`${baseUrl}${path}`)).status
 

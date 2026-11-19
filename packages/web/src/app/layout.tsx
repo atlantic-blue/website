@@ -103,6 +103,14 @@ const RootLayout = ({ children }: { children: ReactNode }) => (
                         <address className="not-italic">
                             {company.registeredOffice.join(", ")}
                         </address>
+                        <p className="mt-4">
+                            <Link
+                                href="/privacy"
+                                className="text-ink no-underline hover:text-accent hover:underline"
+                            >
+                                Privacy policy
+                            </Link>
+                        </p>
                     </div>
                 </div>
             </footer>
