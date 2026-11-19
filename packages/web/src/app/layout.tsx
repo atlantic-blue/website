@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import type { ReactNode } from "react"
 
+import { ConsentBanner, CookieSettings } from "@/components/consent-banner"
 import { Button } from "@/components/ui/button"
 import { footerNav } from "@/lib/nav"
 import { company } from "@/lib/site"
@@ -103,17 +104,26 @@ const RootLayout = ({ children }: { children: ReactNode }) => (
                         <address className="not-italic">
                             {company.registeredOffice.join(", ")}
                         </address>
-                        <p className="mt-4">
+                        <p className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2">
                             <Link
                                 href="/privacy"
                                 className="text-ink no-underline hover:text-accent hover:underline"
                             >
                                 Privacy policy
                             </Link>
+                            <Link
+                                href="/cookies"
+                                className="text-ink no-underline hover:text-accent hover:underline"
+                            >
+                                Cookie policy
+                            </Link>
+                            <CookieSettings />
                         </p>
                     </div>
                 </div>
             </footer>
+
+            <ConsentBanner />
         </body>
     </html>
 )
