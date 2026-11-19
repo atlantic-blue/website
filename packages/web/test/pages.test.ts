@@ -50,7 +50,7 @@ describe("the home page", () => {
 describe("an address that does not exist", () => {
     // The old site answered 200 with the home page for every one of these.
     // See docs/AUDIT-2026-08.md section 2.2.
-    const missing = ["/nonsense-xyz", "/blog", "/contact", "/about"]
+    const missing = ["/nonsense-xyz", "/blog", "/about"]
 
     it.each(missing)("answers 404 for %s", async (path) => {
         const { status } = await get(path)
@@ -193,8 +193,8 @@ describe("mobile layout", () => {
     it("keeps the call to action visible at every width", async () => {
         const { body } = await get("/")
         const header = body.match(/<header[\s\S]*?<\/header>/)?.[0] ?? ""
-        expect(header).toContain("Book a call")
-        expect(header).not.toMatch(/class="[^"]*hidden[^"]*"[^>]*>Book a call</)
+        expect(header).toContain("Contact us")
+        expect(header).not.toMatch(/class="[^"]*hidden[^"]*"[^>]*>Contact us</)
     })
 
     // Overriding --spacing scales every utility on every element at once.
