@@ -14,9 +14,6 @@ const lastModified = new Date("2026-11-16T00:00:00Z")
 /**
  * Every public page. The service and the work addresses are read from the two
  * lists, so a service added later reaches the sitemap without an edit here.
- *
- * /cookies is absent because the page does not exist yet. The step that builds
- * it adds its address.
  */
 const paths: readonly string[] = [
     "/",
@@ -29,6 +26,7 @@ const paths: readonly string[] = [
     "/hushlog/support",
     "/privacy",
     "/contact",
+    "/cookies",
 ]
 
 const sitemap = (): MetadataRoute.Sitemap =>
