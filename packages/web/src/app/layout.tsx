@@ -48,7 +48,7 @@ const RootLayout = ({ children }: { children: ReactNode }) => (
                             Work
                         </Link>
                         <Button asChild>
-                            <a href={`mailto:${company.email}`}>Book a call</a>
+                            <Link href="/contact">Contact us</Link>
                         </Button>
                     </nav>
                 </div>
@@ -104,7 +104,13 @@ const RootLayout = ({ children }: { children: ReactNode }) => (
                         <address className="not-italic">
                             {company.registeredOffice.join(", ")}
                         </address>
-                        <p className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2">
+                        <p className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-2">
+                            <Link
+                                href="/contact"
+                                className="text-ink no-underline hover:text-accent hover:underline"
+                            >
+                                Contact
+                            </Link>
                             <Link
                                 href="/privacy"
                                 className="text-ink no-underline hover:text-accent hover:underline"
