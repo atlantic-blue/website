@@ -4,10 +4,11 @@
 
 import { createElement } from "react"
 
-import { cleanup, fireEvent, render, screen } from "@testing-library/react"
-import { afterEach, beforeAll, beforeEach, describe, expect, inject, it } from "vitest"
+import { act, cleanup, fireEvent, render, screen } from "@testing-library/react"
+import { afterEach, beforeAll, beforeEach, describe, expect, inject, it, vi } from "vitest"
 
 import { ConsentBanner, CookieSettings } from "../src/components/consent-banner"
+import { ContactForm } from "../src/components/contact-form"
 import {
     consentCookieName,
     consentCookieValue,
@@ -38,6 +39,70 @@ const banner = () => screen.queryByRole("region", { name: /cookies/i })
 
 const theVisitorLoadsAPage = (): void => {
     render(createElement("div", null, createElement(ConsentBanner), createElement(CookieSettings)))
+}
+
+const offsetHeightOfEveryElement = Object.getOwnPropertyDescriptor(
+    HTMLElement.prototype,
+    "offsetHeight",
+)
+
+/**
+ * jsdom draws no layout, so every element there reports a height of zero. The
+ * banner is given a height, so the space the page keeps can be read against it.
+ */
+const theBannerIsTall = (pixels: number): void => {
+    Object.defineProperty(HTMLElement.prototype, "offsetHeight", {
+        configurable: true,
+        get: () => pixels,
+    })
+}
+
+const restoreTheHeights = (): void => {
+    if (offsetHeightOfEveryElement !== undefined) {
+        Object.defineProperty(HTMLElement.prototype, "offsetHeight", offsetHeightOfEveryElement)
+    }
+}
+
+/** The space the page keeps at its foot while the banner asks, in pixels. */
+const spaceAtTheFootOfThePage = (): number => {
+    const space = document.getElementById("consent-banner-space")
+    return space === null ? 0 : Number.parseFloat(space.style.height || "0")
+}
+
+const theVisitorLoadsTheContactPage = (): void => {
+    render(
+        createElement(
+            "div",
+            null,
+            createElement(ContactForm, { pagePath: "/contact" }),
+            createElement(ConsentBanner),
+        ),
+    )
+}
+
+/** jsdom has no ResizeObserver, so the path every browser takes needs one here. */
+const watchTheSizeOfAnElement = (): { readonly report: () => void } => {
+    const told: (() => void)[] = []
+
+    vi.stubGlobal(
+        "ResizeObserver",
+        class {
+            constructor(tell: () => void) {
+                told.push(tell)
+            }
+            observe(): void {}
+            unobserve(): void {}
+            disconnect(): void {}
+        },
+    )
+
+    return {
+        report: () => {
+            for (const tell of told) {
+                act(tell)
+            }
+        },
+    }
 }
 
 // United Kingdom law needs consent before a cookie that is not strictly
@@ -144,6 +209,87 @@ describe("a visitor accepts or rejects analytics and can change it", () => {
         expect(consentFromCookies("first=1; last=2")).toBeNull()
         expect(consentFromCookies(`${consentCookieName}=maybe`)).toBeNull()
         expect(consentFromCookies("")).toBeNull()
+    })
+})
+
+// The banner is fixed to the bottom of the viewport, so it is out of the page
+// flow and lies over whatever the foot of the page holds. On /contact that is
+// the send button: the click lands on the banner and the enquiry never sends,
+// so the site loses the enquiry it exists to collect. A banner may ask for an
+// answer. It may not take the page away while it waits.
+describe("the open consent banner covers no control on the page", () => {
+    beforeEach(forgetTheAnswer)
+
+    afterEach(() => {
+        cleanup()
+        restoreTheHeights()
+        vi.unstubAllGlobals()
+    })
+
+    it("keeps space at the foot of the page while it asks", () => {
+        theBannerIsTall(104)
+        theVisitorLoadsTheContactPage()
+
+        expect(banner()).not.toBeNull()
+        expect(screen.getByRole("button", { name: "Send enquiry" })).toBeDefined()
+        expect(spaceAtTheFootOfThePage()).toBeGreaterThanOrEqual(104)
+    })
+
+    it("gives the space back after Accept", () => {
+        theBannerIsTall(104)
+        theVisitorLoadsTheContactPage()
+        fireEvent.click(screen.getByRole("button", { name: "Accept" }))
+
+        expect(banner()).toBeNull()
+        expect(spaceAtTheFootOfThePage()).toBe(0)
+    })
+
+    it("gives the space back after Reject", () => {
+        theBannerIsTall(104)
+        theVisitorLoadsTheContactPage()
+        fireEvent.click(screen.getByRole("button", { name: "Reject" }))
+
+        expect(banner()).toBeNull()
+        expect(spaceAtTheFootOfThePage()).toBe(0)
+    })
+
+    it("keeps no space from a visitor who answered already", () => {
+        theBannerIsTall(104)
+        theVisitorLoadsTheContactPage()
+        fireEvent.click(screen.getByRole("button", { name: "Reject" }))
+        cleanup()
+
+        theVisitorLoadsTheContactPage()
+
+        expect(banner()).toBeNull()
+        expect(spaceAtTheFootOfThePage()).toBe(0)
+    })
+
+    // The banner holds one line of text beside two buttons, and both wrap to
+    // more rows on a narrow phone. A space that keeps the height of the wide
+    // banner leaves the send button under the tall one.
+    it("follows the banner when a change of width makes it taller", () => {
+        theBannerIsTall(104)
+        theVisitorLoadsTheContactPage()
+
+        theBannerIsTall(188)
+        fireEvent(window, new Event("resize"))
+
+        expect(spaceAtTheFootOfThePage()).toBeGreaterThanOrEqual(188)
+    })
+
+    // A webfont arrives after the first paint and the text then reflows, which
+    // no resize event reports. Every browser the site serves watches the size
+    // of an element instead.
+    it("follows the banner when its own size changes under it", () => {
+        const sizeWatchers = watchTheSizeOfAnElement()
+        theBannerIsTall(104)
+        theVisitorLoadsTheContactPage()
+
+        theBannerIsTall(188)
+        sizeWatchers.report()
+
+        expect(spaceAtTheFootOfThePage()).toBeGreaterThanOrEqual(188)
     })
 })
 
