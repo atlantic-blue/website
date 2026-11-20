@@ -53,3 +53,16 @@ resource "aws_route53_record" "alias" {
     evaluate_target_health = false
   }
 }
+
+# Route 53 answers one name with one TXT record set, so every other apex TXT value joins this
+# list rather than take a record of its own. The token verifies the apex domain property, and
+# only production serves the apex.
+resource "aws_route53_record" "apex_txt" {
+  count = local.is_production && var.search_console_token != "" ? 1 : 0
+
+  zone_id = data.aws_route53_zone.primary.zone_id
+  name    = local.primary_domain
+  type    = "TXT"
+  ttl     = 600
+  records = concat([var.search_console_token], var.apex_txt_records)
+}
