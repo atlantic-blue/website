@@ -190,7 +190,7 @@ const resolve = (raw: string, zone: Zone): Value => {
         }
     }
 
-    if (expression === "true" || expression === "false") {
+    if (expression === "true" || expression === "false" || /^[0-9]+$/.test(expression)) {
         return expression
     }
 
