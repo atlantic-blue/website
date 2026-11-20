@@ -71,6 +71,11 @@ jobs:
 
       - name: Build with OpenNext
         working-directory: packages/web
+        # Next.js writes a public variable into the bundle while it builds, so the
+        # measurement property has to reach this step. The gates above build the site
+        # too, and that build stays without it.
+        env:
+          NEXT_PUBLIC_GA_MEASUREMENT_ID: ${{ vars.NEXT_PUBLIC_GA_MEASUREMENT_ID }}
         run: npm run build:opennext
 
       - uses: aws-actions/configure-aws-credentials@v4
@@ -111,6 +116,12 @@ jobs:
           echo "unknown address returned $missing"
           test "$missing" = "404"
           curl -sSI "$url/" | grep -i "strict-transport-security"
+
+          # A tag the policy refuses loads nothing, and the report then stays empty
+          # while every check is green.
+          curl -sSI "$url/" | tr -d '\r' | grep -i '^content-security-policy:' > /tmp/policy.txt
+          grep -q "googletagmanager.com" /tmp/policy.txt
+          grep -q "google-analytics.com" /tmp/policy.txt
 
           # The fault that made the old site slow was a distribution that cached nothing:
           # every time to live was zero, so every request woke the function. A second

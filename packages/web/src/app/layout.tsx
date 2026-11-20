@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import type { ReactNode } from "react"
 
+import { Analytics } from "@/components/analytics"
 import { ConsentBanner, CookieSettings } from "@/components/consent-banner"
 import { Button } from "@/components/ui/button"
 import { footerNav } from "@/lib/nav"
@@ -130,6 +131,7 @@ const RootLayout = ({ children }: { children: ReactNode }) => (
             </footer>
 
             <ConsentBanner />
+            <Analytics />
         </body>
     </html>
 )

@@ -2,17 +2,18 @@
 # no strict transport security, no nosniff, no content security policy, and a minimum
 # protocol of TLS 1.1. See docs/AUDIT-2026-08.md section 2.4.
 #
-# The site self hosts its fonts and carries no third party script, so the policy stays
-# tight. Inline script and style are allowed because Next.js injects its own hydration
-# script and the pages emit an inline structured data block.
+# The site self hosts its fonts. The one third party is the Google tag, which loads
+# only after the visitor accepts, so its hosts are named here and no other host is.
+# Inline script and style are allowed because Next.js injects its own hydration script
+# and the pages emit an inline structured data block.
 locals {
   content_security_policy = join("; ", [
     "default-src 'self'",
-    "script-src 'self' 'unsafe-inline'",
+    "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com",
     "style-src 'self' 'unsafe-inline'",
-    "img-src 'self' data:",
+    "img-src 'self' data: https://*.google-analytics.com https://www.googletagmanager.com",
     "font-src 'self'",
-    "connect-src 'self'",
+    "connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com",
     "frame-ancestors 'none'",
     "base-uri 'self'",
     "form-action 'self'",
